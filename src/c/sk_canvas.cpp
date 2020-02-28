@@ -53,14 +53,6 @@ void sk_canvas_draw_points_wa(sk_canvas_t* ccanvas, sk_point_mode_t pointMode, s
     AsCanvas(ccanvas)->drawPointsWA ((SkCanvas::PointMode)pointMode, count, AsPoint(points), *AsPaint(cpaint), attrName, attrVal);
 }
 
-void sk_canvas_draw_points(sk_canvas_t* ccanvas, sk_point_mode_t pointMode, size_t count, const sk_point_t points [], const sk_paint_t* cpaint) {
-    AsCanvas(ccanvas)->drawPoints ((SkCanvas::PointMode)pointMode, count, AsPoint(points), *AsPaint(cpaint));
-}
-
-void sk_canvas_draw_points_wa(sk_canvas_t* ccanvas, sk_point_mode_t pointMode, size_t count, const sk_point_t points [], const sk_paint_t* cpaint, const char* attrName, const char* attrVal) {
-    AsCanvas(ccanvas)->drawPointsWA ((SkCanvas::PointMode)pointMode, count, AsPoint(points), *AsPaint(cpaint), attrName, attrVal);
-}
-
 void sk_canvas_draw_point(sk_canvas_t* ccanvas, float x, float y, const sk_paint_t* cpaint) {
     AsCanvas(ccanvas)->drawPoint (x, y, *AsPaint(cpaint));
 }

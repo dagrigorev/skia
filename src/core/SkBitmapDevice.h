@@ -100,7 +100,9 @@ protected:
     void drawBitmap(const SkBitmap&, SkScalar x, SkScalar y, const SkPaint&) override;
     void drawBitmapWA(const SkBitmap&, SkScalar x, SkScalar y, const SkPaint&, const char* attrName, const char* attrVal) override;
     void drawSprite(const SkBitmap&, int x, int y, const SkPaint&) override;
-
+    void drawSpriteWA(const SkBitmap &bitmap, int x, int y, const SkPaint &paint, const char*, const char*) override {
+        drawSprite(bitmap, x, y, paint);
+    }
     /**
      *  The default impl. will create a bitmap-shader from the bitmap,
      *  and call drawRect with it.
@@ -119,6 +121,9 @@ protected:
     void drawPosText(const void* text, size_t len, const SkScalar pos[],
                      int scalarsPerPos, const SkPoint& offset, const SkPaint& paint) override;
     void drawVertices(const SkVertices*, SkBlendMode, const SkPaint&) override;
+    void drawVerticesWA(const SkVertices* vertices, SkBlendMode mode, const SkPaint &paint, const char* attrName, const char* attrVal) override {
+        drawVertices(vertices, mode, paint);
+    }
     void drawDevice(SkBaseDevice*, int x, int y, const SkPaint&) override;
 
     void drawPaintWA(const SkPaint& paint, const char* attrName, const char* attrVal) override;
@@ -128,7 +133,9 @@ protected:
     void drawRectWA(const SkRect& r,
                           const SkPaint& paint,
                           const char* attrName, 
-                          const char* attrVal);
+                          const char* attrVal) override {
+        drawRect(r, paint);
+    }
     void drawRegionWA(const SkRegion& r,
                             const SkPaint& paint,
                             const char* attrName,

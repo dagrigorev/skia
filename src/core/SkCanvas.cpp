@@ -309,6 +309,27 @@ static SkPaint* set_if_needed(SkLazyPaint* lazy, const SkPaint& orig) {
     return lazy->isValid() ? lazy->get() : lazy->set(orig);
 }
 
+inline static bool needs_autodrawlooper(SkCanvas* canvas, const SkPaint& paint) {
+    return ((intptr_t)paint.getImageFilter()    |
+#ifdef SK_SUPPORT_LEGACY_DRAWFILTER
+            (intptr_t)canvas->getDrawFilter()   |
+#endif
+            (intptr_t)paint.getLooper()         ) != 0;
+}
+
+// Given storage for a real paint, and an optional paint parameter, clean-up the param (if non-null)
+// given the drawing semantics for drawImage/bitmap (skbug.com/7804) and return it, or the original
+// null.
+static const SkPaint* init_image_paint(SkPaint* real, const SkPaint* paintParam) {
+    if (paintParam) {
+        *real = *paintParam;
+        real->setStyle(SkPaint::kFill_Style);
+        real->setPathEffect(nullptr);
+        paintParam = real;
+    }
+    return paintParam;
+}
+
 /**
  *  If the paint has an imagefilter, but it can be simplified to just a colorfilter, return that
  *  colorfilter, else return nullptr.
@@ -2431,14 +2452,6 @@ void SkCanvas::onDrawPoints(PointMode mode, size_t count, const SkPoint pts[],
     LOOPER_END
 }
 
-static bool needs_autodrawlooper(SkCanvas* canvas, const SkPaint& paint) {
-    return ((intptr_t)paint.getImageFilter()    |
-#ifdef SK_SUPPORT_LEGACY_DRAWFILTER
-            (intptr_t)canvas->getDrawFilter()   |
-#endif
-            (intptr_t)paint.getLooper()         ) != 0;
-}
-
 void SkCanvas::onDrawRect(const SkRect& r, const SkPaint& paint) {
     SkASSERT(r.isSorted());
     if (paint.canComputeFastBounds()) {
@@ -2614,19 +2627,6 @@ bool SkCanvas::canDrawBitmapAsSprite(SkScalar x, SkScalar y, int w, int h, const
     ctm.mapXY(x, y, &pt);
     SkIRect ir = SkIRect::MakeXYWH(SkScalarRoundToInt(pt.x()), SkScalarRoundToInt(pt.y()), w, h);
     return ir.contains(fMCRec->fRasterClip.getBounds());
-}
-
-// Given storage for a real paint, and an optional paint parameter, clean-up the param (if non-null)
-// given the drawing semantics for drawImage/bitmap (skbug.com/7804) and return it, or the original
-// null.
-static const SkPaint* init_image_paint(SkPaint* real, const SkPaint* paintParam) {
-    if (paintParam) {
-        *real = *paintParam;
-        real->setStyle(SkPaint::kFill_Style);
-        real->setPathEffect(nullptr);
-        paintParam = real;
-    }
-    return paintParam;
 }
 
 void SkCanvas::onDrawImage(const SkImage* image, SkScalar x, SkScalar y, const SkPaint* paint) {

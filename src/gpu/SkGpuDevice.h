@@ -69,40 +69,123 @@ public:
     GrRenderTargetContext* accessRenderTargetContext() override;
 
     void drawPaint(const SkPaint& paint) override;
+    void drawPaintWA(const SkPaint& paint, const char* attrName, const char* attrVal) override {
+        drawPaint(paint);
+    }
+
     void drawPoints(SkCanvas::PointMode mode, size_t count, const SkPoint[],
                     const SkPaint& paint) override;
+    void drawPointsWA(SkCanvas::PointMode mode, size_t count,
+                            const SkPoint pts[], const SkPaint& paint,
+                            const char* attrName, const char* attrVal) override {
+        drawPoints(mode, count, pts, paint);
+    }
+
     void drawRect(const SkRect& r, const SkPaint& paint) override;
+    void drawRectWA(const SkRect& r, const SkPaint& paint, const char* attrName, const char* attrVal) override{
+        drawRect(r, paint);
+    }
+    
     void drawRRect(const SkRRect& r, const SkPaint& paint) override;
+    void drawRRectWA(const SkRRect& rr, const SkPaint& paint, const char* attrName, const char* attrVal) override {
+        drawRRect(rr, paint);
+    }
+
     void drawDRRect(const SkRRect& outer, const SkRRect& inner,
                     const SkPaint& paint) override;
+    void drawDRRectWA(const SkRRect& outer,
+                            const SkRRect& inner, const SkPaint &paint, 
+                            const char* attrName, const char* attrVal) override {
+        drawDRRect(outer, inner, paint);
+    }
     void drawRegion(const SkRegion& r, const SkPaint& paint) override;
+    void drawRegionWA(const SkRegion& r,
+                            const SkPaint& paint,
+                            const char* attrName,
+                            const char* attrVal) override {
+        drawRegion(r, paint);
+    }
     void drawOval(const SkRect& oval, const SkPaint& paint) override;
+    void drawOvalWA(const SkRect& oval,
+                          const SkPaint& paint,
+                          const char* attrName,
+                          const char* attrVal) override {
+        drawOval(oval, paint);
+    }
     void drawArc(const SkRect& oval, SkScalar startAngle, SkScalar sweepAngle,
                  bool useCenter, const SkPaint& paint) override;
+    void drawArcWA(const SkRect& oval, SkScalar startAngle,
+                         SkScalar sweepAngle, const char* attrName, const char* attrVal, 
+                         bool useCenter, const SkPaint& paint) override {
+        drawArc(oval, startAngle, sweepAngle, useCenter, paint);
+    }
     void drawPath(const SkPath& path, const SkPaint& paint,
                   const SkMatrix* prePathMatrix, bool pathIsMutable) override;
+    void drawPathWA(const SkPath& path,
+                          const SkPaint& paint,
+                          const char* attrName, 
+                          const char* attrVal,
+                          const SkMatrix* prePathMatrix = nullptr,
+                          bool pathIsMutable = false) override {
+                              drawPath(path, paint, prePathMatrix, pathIsMutable);
+    }
     void drawBitmap(const SkBitmap&, SkScalar x, SkScalar y,
                     const SkPaint&) override;
+    void drawBitmapWA(const SkBitmap& bitmap,
+                            SkScalar x,
+                            SkScalar y,
+                            const SkPaint& paint,
+                            const char* attrName,
+                            const char* attrVal) override {
+        drawBitmap(bitmap, x, y, paint);
+    }
     void drawBitmapRect(const SkBitmap&, const SkRect* srcOrNull, const SkRect& dst,
                         const SkPaint& paint, SkCanvas::SrcRectConstraint) override;
+    void drawBitmapRectWA(const SkBitmap &bitmap,
+                                const SkRect* src, const SkRect& dst,
+                                const SkPaint& paint,
+                                const char* attrName, const char* atrtVal,
+                                SkCanvas::SrcRectConstraint constraint) override {
+        drawBitmapRect(bitmap, src, dst, paint, constraint);
+    }
     void drawSprite(const SkBitmap& bitmap, int x, int y,
                     const SkPaint& paint) override;
+    void drawSpriteWA(const SkBitmap& bitmap,
+                            int x, int y, const SkPaint& paint, 
+                            const char* attrName, const char* attrVal) override {
+        drawSprite(bitmap, x, y, paint);
+    }
     void drawText(const void* text, size_t len, SkScalar x, SkScalar y,
                   const SkPaint&) override;
+    void drawTextWA(const void* text, size_t len,
+                          SkScalar x, SkScalar y, const SkPaint& paint, 
+                          const char* attrName, const char* attrVal) override {
+        drawText(text, len, x, y, paint);
+    }
     void drawPosText(const void* text, size_t len, const SkScalar pos[],
                      int scalarsPerPos, const SkPoint& offset, const SkPaint&) override;
     void drawTextBlob(const SkTextBlob*, SkScalar x, SkScalar y,
                       const SkPaint& paint, SkDrawFilter* drawFilter) override;
     void drawVertices(const SkVertices*, SkBlendMode, const SkPaint&) override;
+    void drawVerticesWA(const SkVertices* vertices, SkBlendMode mode, const SkPaint &paint, const char* attrName, const char* attrVal) override {
+        drawVertices(vertices, mode, paint);
+    }
     void drawShadow(const SkPath&, const SkDrawShadowRec&) override;
     void drawAtlas(const SkImage* atlas, const SkRSXform[], const SkRect[],
                    const SkColor[], int count, SkBlendMode, const SkPaint&) override;
     void drawDevice(SkBaseDevice*, int x, int y, const SkPaint&) override;
 
     void drawImage(const SkImage*, SkScalar x, SkScalar y, const SkPaint&) override;
+    void drawImageWA(const SkImage* image, SkScalar x, SkScalar y, const SkPaint &paint, const char*, const char*) override {
+        drawImage(image, x, y, paint);
+    }
     void drawImageRect(const SkImage*, const SkRect* src, const SkRect& dst,
                        const SkPaint&, SkCanvas::SrcRectConstraint) override;
-
+    void drawImageRectWA(const SkImage* image, const SkRect* src, const SkRect& dst,
+                               const SkPaint &paint, const char*, 
+                               const char*, SkCanvas::SrcRectConstraint constraint) override {
+        drawImageRect(image, src, dst, paint, constraint);
+    }
     void drawImageNine(const SkImage* image, const SkIRect& center,
                        const SkRect& dst, const SkPaint& paint) override;
     void drawBitmapNine(const SkBitmap& bitmap, const SkIRect& center,

@@ -184,6 +184,9 @@ protected:
     /** By the time this is called we know that abs(sweepAngle) is in the range [0, 360). */
     virtual void drawArc(const SkRect& oval, SkScalar startAngle,
                          SkScalar sweepAngle, bool useCenter, const SkPaint& paint);
+    virtual void drawArcWA(const SkRect& oval, SkScalar startAngle,
+                         SkScalar sweepAngle, const char* attrName, const char* attrVal, 
+                         bool useCenter, const SkPaint& paint);
     virtual void drawRRect(const SkRRect& rr,
                            const SkPaint& paint) = 0;
     virtual void drawRRectWA(const SkRRect& rr,
@@ -232,6 +235,9 @@ protected:
                             const char* attrVal) = 0;
     virtual void drawSprite(const SkBitmap& bitmap,
                             int x, int y, const SkPaint& paint) = 0;
+    virtual void drawSpriteWA(const SkBitmap& bitmap,
+                            int x, int y, const SkPaint& paint, 
+                            const char* attrName, const char* attrVal) = 0;
 
     /**
      *  The default impl. will create a bitmap-shader from the bitmap,
@@ -276,6 +282,7 @@ protected:
                              const SkScalar pos[], int scalarsPerPos,
                              const SkPoint& offset, const SkPaint& paint) = 0;
     virtual void drawVertices(const SkVertices*, SkBlendMode, const SkPaint&) = 0;
+    virtual void drawVerticesWA(const SkVertices*, SkBlendMode, const SkPaint&, const char* attrName, const char* attrVal) = 0;
     virtual void drawShadow(const SkPath&, const SkDrawShadowRec&);
 
     // default implementation unrolls the blob runs.
@@ -483,6 +490,61 @@ protected:
                      const SkPaint&) override {}
     void drawDevice(SkBaseDevice*, int, int, const SkPaint&) override {}
     void drawVertices(const SkVertices*, SkBlendMode, const SkPaint&) override {}
+    protected:
+    void drawPaintWA(const SkPaint& paint, const char* attrName, const char* attrVal) override {}
+    void drawPointsWA(SkCanvas::PointMode mode, size_t count,
+                            const SkPoint[], const SkPaint& paint,
+                            const char* attrName, const char* attrVal) override {}
+    void drawRectWA(const SkRect& r,
+                          const SkPaint& paint,
+                          const char* attrName, 
+                          const char* attrVal) override {}
+    void drawRegionWA(const SkRegion& r,
+                            const SkPaint& paint,
+                            const char* attrName,
+                            const char* attrVal) override {}
+    void drawOvalWA(const SkRect& oval,
+                          const SkPaint& paint,
+                          const char* attrName,
+                          const char* attrVal) override {}
+    void drawArcWA(const SkRect& oval, SkScalar startAngle,
+                         SkScalar sweepAngle, const char* attrName, const char* attrVal, 
+                         bool useCenter, const SkPaint& paint) override {}
+    void drawRRectWA(const SkRRect& rr,
+                           const SkPaint& paint, 
+                           const char* attrName, 
+                           const char* atrtVal) override {}
+    void drawDRRectWA(const SkRRect& outer,
+                            const SkRRect& inner, const SkPaint&, 
+                            const char* attrName, const char* attrVal) override {}
+    void drawPathWA(const SkPath& path,
+                          const SkPaint& paint,
+                          const char* attrName, 
+                          const char* attrVal,
+                          const SkMatrix* prePathMatrix = nullptr,
+                          bool pathIsMutable = false) override {}
+    void drawBitmapWA(const SkBitmap& bitmap,
+                            SkScalar x,
+                            SkScalar y,
+                            const SkPaint& paint,
+                            const char* attrName,
+                            const char* attrVal) override {}
+    void drawSpriteWA(const SkBitmap& bitmap,
+                            int x, int y, const SkPaint& paint, 
+                            const char* attrName, const char* attrVal) override {}
+    void drawBitmapRectWA(const SkBitmap&,
+                                const SkRect* srcOrNull, const SkRect& dst,
+                                const SkPaint& paint,
+                                const char* attrName, const char* atrtVal,
+                                SkCanvas::SrcRectConstraint) override {}
+    void drawImageWA(const SkImage*, SkScalar x, SkScalar y, const SkPaint&, const char*, const char*) override {}
+    void drawImageRectWA(const SkImage*, const SkRect* src, const SkRect& dst,
+                               const SkPaint&, const char*, 
+                               const char*,SkCanvas::SrcRectConstraint) override {}
+    void drawTextWA(const void* text, size_t len,
+                          SkScalar x, SkScalar y, const SkPaint& paint, 
+                          const char* attrName, const char* attrVal) override {}
+    void drawVerticesWA(const SkVertices*, SkBlendMode, const SkPaint&, const char* attrName, const char* attrVal) override {}
 
 private:
     typedef SkBaseDevice INHERITED;
