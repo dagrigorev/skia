@@ -41,36 +41,80 @@ void sk_canvas_draw_color(sk_canvas_t* ccanvas, sk_color_t color, sk_blendmode_t
     AsCanvas(ccanvas)->drawColor(color, (SkBlendMode)cmode);
 }
 
+void sk_canvas_draw_color_wa(sk_canvas_t* ccanvas, sk_color_t color, sk_blendmode_t cmode, const char* attrName, const char* attrVal) {
+    AsCanvas(ccanvas)->drawColorWA(color, attrName, attrVal, (SkBlendMode)cmode);
+}
+
 void sk_canvas_draw_points(sk_canvas_t* ccanvas, sk_point_mode_t pointMode, size_t count, const sk_point_t points [], const sk_paint_t* cpaint) {
     AsCanvas(ccanvas)->drawPoints ((SkCanvas::PointMode)pointMode, count, AsPoint(points), *AsPaint(cpaint));
+}
+
+void sk_canvas_draw_points_wa(sk_canvas_t* ccanvas, sk_point_mode_t pointMode, size_t count, const sk_point_t points [], const sk_paint_t* cpaint, const char* attrName, const char* attrVal) {
+    AsCanvas(ccanvas)->drawPointsWA ((SkCanvas::PointMode)pointMode, count, AsPoint(points), *AsPaint(cpaint), attrName, attrVal);
+}
+
+void sk_canvas_draw_points(sk_canvas_t* ccanvas, sk_point_mode_t pointMode, size_t count, const sk_point_t points [], const sk_paint_t* cpaint) {
+    AsCanvas(ccanvas)->drawPoints ((SkCanvas::PointMode)pointMode, count, AsPoint(points), *AsPaint(cpaint));
+}
+
+void sk_canvas_draw_points_wa(sk_canvas_t* ccanvas, sk_point_mode_t pointMode, size_t count, const sk_point_t points [], const sk_paint_t* cpaint, const char* attrName, const char* attrVal) {
+    AsCanvas(ccanvas)->drawPointsWA ((SkCanvas::PointMode)pointMode, count, AsPoint(points), *AsPaint(cpaint), attrName, attrVal);
 }
 
 void sk_canvas_draw_point(sk_canvas_t* ccanvas, float x, float y, const sk_paint_t* cpaint) {
     AsCanvas(ccanvas)->drawPoint (x, y, *AsPaint(cpaint));
 }
 
+void sk_canvas_draw_point_wa(sk_canvas_t* ccanvas, float x, float y, const sk_paint_t* cpaint, const char* attrName, const char* attrVal) {
+    AsCanvas(ccanvas)->drawPointWA (x, y, *AsPaint(cpaint), attrName, attrVal);
+}
+
 void sk_canvas_draw_line(sk_canvas_t* ccanvas, float x0, float y0, float x1, float y1, sk_paint_t* cpaint) {
     AsCanvas(ccanvas)->drawLine(x0, y0, x1, y1, *AsPaint(cpaint));
+}
+
+void sk_canvas_draw_line_wa(sk_canvas_t* ccanvas, float x0, float y0, float x1, float y1, sk_paint_t* cpaint, const char* attrName, const char* attrVal) {
+    AsCanvas(ccanvas)->drawLineWA(x0, y0, x1, y1, *AsPaint(cpaint), attrName, attrVal);
 }
 
 void sk_canvas_draw_text (sk_canvas_t* ccanvas, const char *text, size_t byteLength, float x, float y, const sk_paint_t* cpaint) {
     AsCanvas(ccanvas)->drawText(text, byteLength, x, y, *AsPaint(cpaint));
 }
 
+void sk_canvas_draw_text_wa (sk_canvas_t* ccanvas, const char *text, size_t byteLength, float x, float y, const sk_paint_t* cpaint, const char* attrName, const char* attrVal) {
+    AsCanvas(ccanvas)->drawTextWA(text, byteLength, x, y, *AsPaint(cpaint), attrName, attrVal);
+}
+
 void sk_canvas_draw_pos_text (sk_canvas_t* ccanvas, const char *text, size_t byteLength, const sk_point_t pos[], const sk_paint_t* cpaint) {
     AsCanvas(ccanvas)->drawPosText(text, byteLength, AsPoint(pos), *AsPaint(cpaint));
+}
+
+void sk_canvas_draw_pos_text_wa (sk_canvas_t* ccanvas, const char *text, size_t byteLength, const sk_point_t pos[], const sk_paint_t* cpaint, const char* attrName, const char* attrVal) {
+    AsCanvas(ccanvas)->drawPosTextWA(text, byteLength, AsPoint(pos), *AsPaint(cpaint), attrName, attrVal);
 }
 
 void sk_canvas_draw_text_on_path (sk_canvas_t* ccanvas, const char *text, size_t byteLength, const sk_path_t* path, float hOffset, float vOffset, const sk_paint_t* cpaint) {
     AsCanvas(ccanvas)->drawTextOnPathHV(text, byteLength, *AsPath(path), hOffset, vOffset, *AsPaint(cpaint));
 }
 
+void sk_canvas_draw_text_on_path_wa (sk_canvas_t* ccanvas, const char *text, size_t byteLength, const sk_path_t* path, float hOffset, float vOffset, const sk_paint_t* cpaint, const char* attrName, const char* attrVal) {
+    AsCanvas(ccanvas)->drawTextOnPathHVWA(text, byteLength, *AsPath(path), hOffset, vOffset, *AsPaint(cpaint), attrName, attrVal);
+}
+
 void sk_canvas_draw_text_blob (sk_canvas_t* ccanvas, sk_textblob_t* text, float x, float y, const sk_paint_t* cpaint) {
     AsCanvas(ccanvas)->drawTextBlob(AsTextBlob(text), x, y, *AsPaint(cpaint));
 }
 
+void sk_canvas_draw_text_blob_wa (sk_canvas_t* ccanvas, sk_textblob_t* text, float x, float y, const sk_paint_t* cpaint, const char* attrName, const char* attrVal) {
+    AsCanvas(ccanvas)->drawTextBlobWA(AsTextBlob(text), x, y, *AsPaint(cpaint), attrName, attrVal);
+}
+
 void sk_canvas_draw_bitmap(sk_canvas_t* ccanvas, const sk_bitmap_t* cbitmap, float x, float y, const sk_paint_t* cpaint) {
     AsCanvas(ccanvas)->drawBitmap(*AsBitmap(cbitmap), x, y, AsPaint(cpaint));
+}
+
+void sk_canvas_draw_bitmap_wa(sk_canvas_t* ccanvas, const sk_bitmap_t* cbitmap, float x, float y, const sk_paint_t* cpaint, const char* attrName, const char* attrVal) {
+    AsCanvas(ccanvas)->drawBitmapWA(*AsBitmap(cbitmap), x, y, attrName, attrVal, AsPaint(cpaint));
 }
 
 void sk_canvas_draw_bitmap_rect(sk_canvas_t* ccanvas, const sk_bitmap_t* cbitmap, const sk_rect_t* csrcR, const sk_rect_t* cdstR, const sk_paint_t* cpaint) {
@@ -79,6 +123,15 @@ void sk_canvas_draw_bitmap_rect(sk_canvas_t* ccanvas, const sk_bitmap_t* cbitmap
     }
     else {
         AsCanvas(ccanvas)->drawBitmapRect(*AsBitmap(cbitmap), *AsRect(cdstR), AsPaint(cpaint));
+    }
+}
+
+void sk_canvas_draw_bitmap_rect_wa(sk_canvas_t* ccanvas, const sk_bitmap_t* cbitmap, const sk_rect_t* csrcR, const sk_rect_t* cdstR, const sk_paint_t* cpaint, const char* attrName, const char* attrVal) {
+    if (csrcR) {
+        AsCanvas(ccanvas)->drawBitmapRectWA(*AsBitmap(cbitmap), *AsRect(csrcR), *AsRect(cdstR), AsPaint(cpaint), attrName, attrVal);
+    }
+    else {
+        AsCanvas(ccanvas)->drawBitmapRectWA(*AsBitmap(cbitmap), *AsRect(cdstR), AsPaint(cpaint), attrName, attrVal);
     }
 }
 
@@ -96,6 +149,10 @@ void sk_canvas_get_total_matrix(sk_canvas_t* ccanvas, sk_matrix_t* cmatrix) {
 
 void sk_canvas_draw_round_rect(sk_canvas_t* ccanvas, const sk_rect_t* crect, float rx, float ry, const sk_paint_t* cpaint) {
     AsCanvas(ccanvas)->drawRoundRect(*AsRect(crect), rx, ry, *AsPaint(cpaint));
+}
+
+void sk_canvas_draw_round_rect_wa(sk_canvas_t* ccanvas, const sk_rect_t* crect, float rx, float ry, const sk_paint_t* cpaint, const char* attrName, const char* attrVal) {
+    AsCanvas(ccanvas)->drawRoundRectWA(*AsRect(crect), rx, ry, *AsPaint(cpaint), attrName, attrVal);
 }
 
 void sk_canvas_clip_rect_with_operation(sk_canvas_t* ccanvas, const sk_rect_t* crect, sk_clipop_t op, bool doAA) {
@@ -166,32 +223,64 @@ void sk_canvas_draw_paint(sk_canvas_t* ccanvas, const sk_paint_t* cpaint) {
     AsCanvas(ccanvas)->drawPaint(*AsPaint(cpaint));
 }
 
+void sk_canvas_draw_paint_wa(sk_canvas_t* ccanvas, const sk_paint_t* cpaint, const char* attrName, const char* attrVal) {
+    AsCanvas(ccanvas)->drawPaintWA(*AsPaint(cpaint), attrName, attrVal);
+}
+
 void sk_canvas_draw_region(sk_canvas_t* ccanvas, const sk_region_t* cregion, const sk_paint_t* cpaint) {
     AsCanvas(ccanvas)->drawRegion(*AsRegion(cregion), *AsPaint(cpaint));
+}
+
+void sk_canvas_draw_region_wa(sk_canvas_t* ccanvas, const sk_region_t* cregion, const sk_paint_t* cpaint, const char* attrName, const char* attrVal) {
+    AsCanvas(ccanvas)->drawRegionWA(*AsRegion(cregion), *AsPaint(cpaint), attrName, attrVal);
 }
 
 void sk_canvas_draw_rect(sk_canvas_t* ccanvas, const sk_rect_t* crect, const sk_paint_t* cpaint) {
     AsCanvas(ccanvas)->drawRect(*AsRect(crect), *AsPaint(cpaint));
 }
 
+void sk_canvas_draw_rect_wa(sk_canvas_t* ccanvas, const sk_rect_t* crect, const sk_paint_t* cpaint, const char* attrName, const char* attrVal) {
+    AsCanvas(ccanvas)->drawRectWA(*AsRect(crect), *AsPaint(cpaint), attrName, attrVal);
+}
+
 void sk_canvas_draw_rrect(sk_canvas_t* ccanvas, const sk_rrect_t* crect, const sk_paint_t* cpaint) {
     AsCanvas(ccanvas)->drawRRect(*AsRRect(crect), *AsPaint(cpaint));
+}
+
+void sk_canvas_draw_rrect_wa(sk_canvas_t* ccanvas, const sk_rrect_t* crect, const sk_paint_t* cpaint, const char* attrName, const char* attrVal) {
+    AsCanvas(ccanvas)->drawRRectWA(*AsRRect(crect), *AsPaint(cpaint), attrName, attrVal);
 }
 
 void sk_canvas_draw_circle(sk_canvas_t* ccanvas, float cx, float cy, float rad, const sk_paint_t* cpaint) {
     AsCanvas(ccanvas)->drawCircle(cx, cy, rad, *AsPaint(cpaint));
 }
 
+void sk_canvas_draw_circle_wa(sk_canvas_t* ccanvas, float cx, float cy, float rad, const sk_paint_t* cpaint, const char* attrName, const char* attrVal) {
+    AsCanvas(ccanvas)->drawCircleWA(cx, cy, rad, *AsPaint(cpaint), attrName, attrVal);
+}
+
 void sk_canvas_draw_oval(sk_canvas_t* ccanvas, const sk_rect_t* crect, const sk_paint_t* cpaint) {
     AsCanvas(ccanvas)->drawOval(*AsRect(crect), *AsPaint(cpaint));
+}
+
+void sk_canvas_draw_oval_wa(sk_canvas_t* ccanvas, const sk_rect_t* crect, const sk_paint_t* cpaint, const char* attrName, const char* attrVal) {
+    AsCanvas(ccanvas)->drawOvalWA(*AsRect(crect), *AsPaint(cpaint), attrName, attrVal);
 }
 
 void sk_canvas_draw_path(sk_canvas_t* ccanvas, const sk_path_t* cpath, const sk_paint_t* cpaint) {
     AsCanvas(ccanvas)->drawPath(*AsPath(cpath), *AsPaint(cpaint));
 }
 
+void sk_canvas_draw_path_wa(sk_canvas_t* ccanvas, const sk_path_t* cpath, const sk_paint_t* cpaint, const char* attrName, const char* attrVal) {
+    AsCanvas(ccanvas)->drawPathWA(*AsPath(cpath), *AsPaint(cpaint), attrName, attrVal);
+}
+
 void sk_canvas_draw_image(sk_canvas_t* ccanvas, const sk_image_t* cimage, float x, float y, const sk_paint_t* cpaint) {
     AsCanvas(ccanvas)->drawImage(AsImage(cimage), x, y, AsPaint(cpaint));
+}
+
+void sk_canvas_draw_image_wa(sk_canvas_t* ccanvas, const sk_image_t* cimage, float x, float y, const sk_paint_t* cpaint, const char* attrName, const char* attrVal) {
+    AsCanvas(ccanvas)->drawImageWA(AsImage(cimage), x, y, attrName, attrVal, AsPaint(cpaint));
 }
 
 void sk_canvas_draw_image_rect(sk_canvas_t* ccanvas, const sk_image_t* cimage, const sk_rect_t* csrcR, const sk_rect_t* cdstR, const sk_paint_t* cpaint) {
@@ -199,6 +288,14 @@ void sk_canvas_draw_image_rect(sk_canvas_t* ccanvas, const sk_image_t* cimage, c
         AsCanvas(ccanvas)->drawImageRect(AsImage(cimage), *AsRect(csrcR), *AsRect(cdstR), AsPaint(cpaint));
     } else {
         AsCanvas(ccanvas)->drawImageRect(AsImage(cimage), *AsRect(cdstR), AsPaint(cpaint));
+    }
+}
+
+void sk_canvas_draw_image_rect_wa(sk_canvas_t* ccanvas, const sk_image_t* cimage, const sk_rect_t* csrcR, const sk_rect_t* cdstR, const sk_paint_t* cpaint, const char* attrName, const char* attrVal) {
+    if (csrcR) {
+        AsCanvas(ccanvas)->drawImageRectWA(AsImage(cimage), *AsRect(csrcR), *AsRect(cdstR), AsPaint(cpaint), attrName, attrVal);
+    } else {
+        AsCanvas(ccanvas)->drawImageRectWA(AsImage(cimage), *AsRect(cdstR), AsPaint(cpaint), attrName, attrVal);
     }
 }
 
@@ -210,12 +307,28 @@ void sk_canvas_draw_picture(sk_canvas_t* ccanvas, const sk_picture_t* cpicture, 
     AsCanvas(ccanvas)->drawPicture(AsPicture(cpicture), cmatrix ? &m : nullptr, AsPaint(cpaint));
 }
 
+void sk_canvas_draw_picture_wa(sk_canvas_t* ccanvas, const sk_picture_t* cpicture, const sk_matrix_t* cmatrix, const sk_paint_t* cpaint, const char* attrName, const char* attrVal) {
+    SkMatrix m;
+    if (cmatrix) {
+        m = AsMatrix(cmatrix);
+    }
+    AsCanvas(ccanvas)->drawPictureWA(AsPicture(cpicture), cmatrix ? &m : nullptr, AsPaint(cpaint), attrName, attrVal);
+}
+
 void sk_canvas_draw_drawable(sk_canvas_t* ccanvas, sk_drawable_t* cdrawable, const sk_matrix_t* cmatrix) {
     SkMatrix m;
     if (cmatrix) {
         m = AsMatrix(cmatrix);
     }
     AsCanvas(ccanvas)->drawDrawable(AsDrawable(cdrawable), cmatrix ? &m : nullptr);
+}
+
+void sk_canvas_draw_drawable_wa(sk_canvas_t* ccanvas, sk_drawable_t* cdrawable, const sk_matrix_t* cmatrix, const char* attrName, const char* attrVal) {
+    SkMatrix m;
+    if (cmatrix) {
+        m = AsMatrix(cmatrix);
+    }
+    AsCanvas(ccanvas)->drawDrawableWA(AsDrawable(cdrawable), attrName, attrVal, cmatrix ? &m : nullptr);
 }
 
 void sk_canvas_flush(sk_canvas_t* ccanvas) {
@@ -262,20 +375,40 @@ void sk_canvas_draw_vertices(sk_canvas_t* ccanvas, const sk_vertices_t* vertices
     AsCanvas(ccanvas)->drawVertices(AsVertices(vertices), (SkBlendMode)mode, *AsPaint(paint));
 }
 
+void sk_canvas_draw_vertices_wa(sk_canvas_t* ccanvas, const sk_vertices_t* vertices, sk_blendmode_t mode, const sk_paint_t* paint, const char* attrName, const char* attrVal) {
+    AsCanvas(ccanvas)->drawVerticesWA(AsVertices(vertices), (SkBlendMode)mode, *AsPaint(paint), attrName, attrVal);
+}
+
 void sk_canvas_draw_arc(sk_canvas_t* ccanvas, const sk_rect_t* oval, float startAngle, float sweepAngle, bool useCenter, const sk_paint_t* paint) {
     AsCanvas(ccanvas)->drawArc(*AsRect(oval), startAngle, sweepAngle, useCenter, *AsPaint(paint));
+}
+
+void sk_canvas_draw_arc_wa(sk_canvas_t* ccanvas, const sk_rect_t* oval, float startAngle, float sweepAngle, bool useCenter, const sk_paint_t* paint, const char* attrName, const char* attrVal) {
+    AsCanvas(ccanvas)->drawArcWA(*AsRect(oval), startAngle, sweepAngle, useCenter, *AsPaint(paint), attrName, attrVal);
 }
 
 void sk_canvas_draw_drrect(sk_canvas_t* ccanvas, const sk_rrect_t* outer, const sk_rrect_t* inner, const sk_paint_t* paint) {
     AsCanvas(ccanvas)->drawDRRect(*AsRRect(outer), *AsRRect(inner), *AsPaint(paint));
 }
 
+void sk_canvas_draw_drrect_wa(sk_canvas_t* ccanvas, const sk_rrect_t* outer, const sk_rrect_t* inner, const sk_paint_t* paint, const char* attrName, const char* attrVal) {
+    AsCanvas(ccanvas)->drawDRRectWA(*AsRRect(outer), *AsRRect(inner), *AsPaint(paint), attrName, attrVal);
+}
+
 void sk_canvas_draw_atlas(sk_canvas_t* ccanvas, const sk_image_t* atlas, const sk_rsxform_t* xform, const sk_rect_t* tex, const sk_color_t* colors, int count, sk_blendmode_t mode, const sk_rect_t* cullRect, const sk_paint_t* paint) {
     AsCanvas(ccanvas)->drawAtlas(AsImage(atlas), AsRSXform(xform), AsRect(tex), colors, count, (SkBlendMode)mode, AsRect(cullRect), AsPaint(paint));
 }
 
+void sk_canvas_draw_atlas_wa(sk_canvas_t* ccanvas, const sk_image_t* atlas, const sk_rsxform_t* xform, const sk_rect_t* tex, const sk_color_t* colors, int count, sk_blendmode_t mode, const sk_rect_t* cullRect, const sk_paint_t* paint, const char* attrName, const char* attrVal) {
+    AsCanvas(ccanvas)->drawAtlasWA(AsImage(atlas), AsRSXform(xform), AsRect(tex), colors, count, (SkBlendMode)mode, AsRect(cullRect), AsPaint(paint), attrName, attrVal);
+}
+
 void sk_canvas_draw_patch(sk_canvas_t* ccanvas, const sk_point_t* cubics, const sk_color_t* colors, const sk_point_t* texCoords, sk_blendmode_t mode, const sk_paint_t* paint) {
     AsCanvas(ccanvas)->drawPatch(AsPoint(cubics), colors, AsPoint(texCoords), (SkBlendMode)mode, *AsPaint(paint));
+}
+
+void sk_canvas_draw_patch_wa(sk_canvas_t* ccanvas, const sk_point_t* cubics, const sk_color_t* colors, const sk_point_t* texCoords, sk_blendmode_t mode, const sk_paint_t* paint, const char* attrName, const char* attrVal) {
+    AsCanvas(ccanvas)->drawPatchWA(AsPoint(cubics), colors, AsPoint(texCoords), (SkBlendMode)mode, *AsPaint(paint), attrName, attrVal);
 }
 
 bool sk_canvas_is_clip_empty(sk_canvas_t* ccanvas) {

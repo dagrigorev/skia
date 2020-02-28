@@ -157,23 +157,47 @@ protected:
      DrawFilter.
      */
     virtual void drawPaint(const SkPaint& paint) = 0;
+    virtual void drawPaintWA(const SkPaint& paint, const char* attrName, const char* attrVal) = 0;
     virtual void drawPoints(SkCanvas::PointMode mode, size_t count,
                             const SkPoint[], const SkPaint& paint) = 0;
+    virtual void drawPointsWA(SkCanvas::PointMode mode, size_t count,
+                            const SkPoint[], const SkPaint& paint,
+                            const char* attrName, const char* attrVal) = 0;
     virtual void drawRect(const SkRect& r,
                           const SkPaint& paint) = 0;
+    virtual void drawRectWA(const SkRect& r,
+                          const SkPaint& paint,
+                          const char* attrName, 
+                          const char* attrVal) = 0;
     virtual void drawRegion(const SkRegion& r,
                             const SkPaint& paint);
+    virtual void drawRegionWA(const SkRegion& r,
+                            const SkPaint& paint,
+                            const char* attrName,
+                            const char* attrVal);
     virtual void drawOval(const SkRect& oval,
                           const SkPaint& paint) = 0;
+    virtual void drawOvalWA(const SkRect& oval,
+                          const SkPaint& paint,
+                          const char* attrName,
+                          const char* attrVal) = 0;
     /** By the time this is called we know that abs(sweepAngle) is in the range [0, 360). */
     virtual void drawArc(const SkRect& oval, SkScalar startAngle,
                          SkScalar sweepAngle, bool useCenter, const SkPaint& paint);
     virtual void drawRRect(const SkRRect& rr,
                            const SkPaint& paint) = 0;
+    virtual void drawRRectWA(const SkRRect& rr,
+                           const SkPaint& paint, 
+                           const char* attrName, 
+                           const char* atrtVal) = 0;
 
     // Default impl calls drawPath()
     virtual void drawDRRect(const SkRRect& outer,
                             const SkRRect& inner, const SkPaint&);
+
+    virtual void drawDRRectWA(const SkRRect& outer,
+                            const SkRRect& inner, const SkPaint&, 
+                            const char* attrName, const char* attrVal);
 
     /**
      *  If pathIsMutable, then the implementation is allowed to cast path to a
@@ -190,10 +214,22 @@ protected:
                           const SkPaint& paint,
                           const SkMatrix* prePathMatrix = nullptr,
                           bool pathIsMutable = false) = 0;
+    virtual void drawPathWA(const SkPath& path,
+                          const SkPaint& paint,
+                          const char* attrName, 
+                          const char* attrVal,
+                          const SkMatrix* prePathMatrix = nullptr,
+                          bool pathIsMutable = false) = 0;
     virtual void drawBitmap(const SkBitmap& bitmap,
                             SkScalar x,
                             SkScalar y,
                             const SkPaint& paint) = 0;
+    virtual void drawBitmapWA(const SkBitmap& bitmap,
+                            SkScalar x,
+                            SkScalar y,
+                            const SkPaint& paint,
+                            const char* attrName,
+                            const char* attrVal) = 0;
     virtual void drawSprite(const SkBitmap& bitmap,
                             int x, int y, const SkPaint& paint) = 0;
 
@@ -205,14 +241,23 @@ protected:
                                 const SkRect* srcOrNull, const SkRect& dst,
                                 const SkPaint& paint,
                                 SkCanvas::SrcRectConstraint) = 0;
+    virtual void drawBitmapRectWA(const SkBitmap&,
+                                const SkRect* srcOrNull, const SkRect& dst,
+                                const SkPaint& paint,
+                                const char* attrName, const char* atrtVal,
+                                SkCanvas::SrcRectConstraint) = 0;
     virtual void drawBitmapNine(const SkBitmap&, const SkIRect& center,
                                 const SkRect& dst, const SkPaint&);
     virtual void drawBitmapLattice(const SkBitmap&, const SkCanvas::Lattice&,
                                    const SkRect& dst, const SkPaint&);
 
     virtual void drawImage(const SkImage*, SkScalar x, SkScalar y, const SkPaint&);
+    virtual void drawImageWA(const SkImage*, SkScalar x, SkScalar y, const SkPaint&, const char*, const char*);
     virtual void drawImageRect(const SkImage*, const SkRect* src, const SkRect& dst,
                                const SkPaint&, SkCanvas::SrcRectConstraint);
+    virtual void drawImageRectWA(const SkImage*, const SkRect* src, const SkRect& dst,
+                               const SkPaint&, const char*, 
+                               const char*,SkCanvas::SrcRectConstraint);
     virtual void drawImageNine(const SkImage*, const SkIRect& center,
                                const SkRect& dst, const SkPaint&);
     virtual void drawImageLattice(const SkImage*, const SkCanvas::Lattice&,
@@ -224,6 +269,9 @@ protected:
      */
     virtual void drawText(const void* text, size_t len,
                           SkScalar x, SkScalar y, const SkPaint& paint) = 0;
+    virtual void drawTextWA(const void* text, size_t len,
+                          SkScalar x, SkScalar y, const SkPaint& paint, 
+                          const char* attrName, const char* attrVal) = 0;
     virtual void drawPosText(const void* text, size_t len,
                              const SkScalar pos[], int scalarsPerPos,
                              const SkPoint& offset, const SkPaint& paint) = 0;
@@ -257,6 +305,9 @@ protected:
 
     virtual void drawSpecial(SkSpecialImage*, int x, int y, const SkPaint&,
                              SkImage* clipImage, const SkMatrix& clipMatrix);
+    virtual void drawSpecialWA(SkSpecialImage*, int x, int y, const SkPaint&,
+                             SkImage* clipImage, const SkMatrix& clipMatrix,
+                             const char* attrName, const char* attrVal);
     virtual sk_sp<SkSpecialImage> makeSpecial(const SkBitmap&);
     virtual sk_sp<SkSpecialImage> makeSpecial(const SkImage*);
     virtual sk_sp<SkSpecialImage> snapSpecial();

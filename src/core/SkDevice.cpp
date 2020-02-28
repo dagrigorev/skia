@@ -126,6 +126,20 @@ void SkBaseDevice::drawDRRect(const SkRRect& outer,
     this->drawPath(path, paint, preMatrix, pathIsMutable);
 }
 
+void SkBaseDevice::drawDRRectWA(const SkRRect& outer,
+                              const SkRRect& inner, const SkPaint& paint,
+                              const char* attrName, const char* attrVal) {
+    SkPath path;
+    path.addRRect(outer);
+    path.addRRect(inner);
+    path.setFillType(SkPath::kEvenOdd_FillType);
+    path.setIsVolatile(true);
+    
+    const SkMatrix* preMatrix = nullptr;
+    const bool pathIsMutable = true;
+    this->drawPathWA(path, paint, attrName, attrVal, preMatrix, pathIsMutable);
+}
+
 void SkBaseDevice::drawPatch(const SkPoint cubics[12], const SkColor colors[4],
                              const SkPoint texCoords[4], SkBlendMode bmode,
                              bool interpColorsLinearly, const SkPaint& paint) {
@@ -187,12 +201,31 @@ void SkBaseDevice::drawImage(const SkImage* image, SkScalar x, SkScalar y,
     }
 }
 
+void SkBaseDevice::drawImageWA(const SkImage* image, SkScalar x, SkScalar y,
+                             const SkPaint& paint, const char* attrName, 
+                             const char* attrVal) {
+    SkBitmap bm;
+    if (as_IB(image)->getROPixels(&bm, this->imageInfo().colorSpace())) {
+        this->drawBitmapWA(bm, x, y, paint, attrName, attrVal);
+    }
+}
+
 void SkBaseDevice::drawImageRect(const SkImage* image, const SkRect* src,
                                  const SkRect& dst, const SkPaint& paint,
                                  SkCanvas::SrcRectConstraint constraint) {
     SkBitmap bm;
     if (as_IB(image)->getROPixels(&bm, this->imageInfo().colorSpace())) {
         this->drawBitmapRect(bm, src, dst, paint, constraint);
+    }
+}
+
+void SkBaseDevice::drawImageRectWA(const SkImage* image, const SkRect* src,
+                                 const SkRect& dst, const SkPaint& paint,
+                                 const char* attrName, const char* attrVal,
+                                 SkCanvas::SrcRectConstraint constraint) {
+    SkBitmap bm;
+    if (as_IB(image)->getROPixels(&bm, this->imageInfo().colorSpace())) {
+        this->drawBitmapRectWA(bm, src, dst, paint, attrName, attrVal, constraint);
     }
 }
 
