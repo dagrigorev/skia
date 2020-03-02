@@ -186,6 +186,10 @@ static void CallBitmapXferProc(const SkPixmap& dst, const SkIRect& rect, BitmapX
     }
 }
 
+void SkDraw::drawPaintWA(const SkPaint &paint, const char* attrName, const char* attrVal) {
+    drawPaint(paint);
+}
+
 void SkDraw::drawPaint(const SkPaint& paint) const {
     SkDEBUGCODE(this->validate();)
 

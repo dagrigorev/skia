@@ -759,6 +759,13 @@ void SkSVGDevice::drawPaint(const SkPaint& paint) {
                                           SkIntToScalar(this->height())));
 }
 
+void SkSVGDevice::drawPaintWA(const SkPaint& paint, const char* attrName, const char* attrVal) {
+    AutoElement rect("rect", fWriter, fResourceBucket.get(), MxCp(this), paint);
+    rect.addAttribute(attrName, attrVal);
+    rect.addRectAttributes(SkRect::MakeWH(SkIntToScalar(this->width()),
+                                          SkIntToScalar(this->height())));
+}
+
 void SkSVGDevice::drawAnnotation(const SkRect& rect, const char key[], SkData* value) {
     if (!value) {
         return;
@@ -815,6 +822,39 @@ void SkSVGDevice::drawPoints(SkCanvas::PointMode mode, size_t count,
     }
 }
 
+void SkSVGDevice::drawPointsWA(SkCanvas::PointMode mode, size_t count,
+                    const SkPoint pts[], const SkPaint& paint,
+                    const char* attrName, const char* attrVal) {
+    SkPath path;
+
+    switch (mode) {
+            // todo
+        case SkCanvas::kPoints_PointMode:
+            // TODO?
+            break;
+        case SkCanvas::kLines_PointMode:
+            count -= 1;
+            for (size_t i = 0; i < count; i += 2) {
+                path.rewind();
+                path.moveTo(pts[i]);
+                path.lineTo(pts[i+1]);
+                AutoElement elem("path", fWriter, fResourceBucket.get(), MxCp(this), paint);
+                elem.addPathAttributes(path);
+                elem.addAttribute(attrName, attrVal);
+            }
+            break;
+        case SkCanvas::kPolygon_PointMode:
+            if (count > 1) {
+                path.addPoly(pts, SkToInt(count), false);
+                path.moveTo(pts[0]);
+                AutoElement elem("path", fWriter, fResourceBucket.get(), MxCp(this), paint);
+                elem.addPathAttributes(path);
+                elem.addAttribute(attrName, attrVal);
+            }
+            break;
+    }
+}
+
 void SkSVGDevice::drawRect(const SkRect& r, const SkPaint& paint) {
     std::unique_ptr<AutoElement> svg;
     if (RequiresViewportReset(paint)) {
@@ -834,12 +874,43 @@ void SkSVGDevice::drawRect(const SkRect& r, const SkPaint& paint) {
     }
 }
 
+void SkSVGDevice::drawRectWA(const SkRect& r, const SkPaint& paint, const char* attrName, const char* attrVal) {
+    std::unique_ptr<AutoElement> svg;
+    if (RequiresViewportReset(paint)) {
+      svg.reset(new AutoElement("svg", fWriter, fResourceBucket.get(), MxCp(this), paint));
+      svg->addRectAttributes(r);
+    }
+
+    AutoElement rect("rect", fWriter, fResourceBucket.get(), MxCp(this), paint);
+    rect.addAttribute(attrName, attrVal);
+    if (svg) {
+      rect.addAttribute("x", 0);
+      rect.addAttribute("y", 0);
+      rect.addAttribute("width", "100%");
+      rect.addAttribute("height", "100%");
+    } else {
+      rect.addRectAttributes(r);
+    }
+}
+
 void SkSVGDevice::drawOval(const SkRect& oval, const SkPaint& paint) {
     AutoElement ellipse("ellipse", fWriter, fResourceBucket.get(), MxCp(this), paint);
     ellipse.addAttribute("cx", oval.centerX());
     ellipse.addAttribute("cy", oval.centerY());
     ellipse.addAttribute("rx", oval.width() / 2);
     ellipse.addAttribute("ry", oval.height() / 2);
+}
+
+void SkSVGDevice::drawOvalWA(const SkRect& oval,
+                          const SkPaint& paint,
+                          const char* attrName,
+                          const char* attrVal) {
+    AutoElement ellipse("ellipse", fWriter, fResourceBucket.get(), MxCp(this), paint);
+    ellipse.addAttribute("cx", oval.centerX());
+    ellipse.addAttribute("cy", oval.centerY());
+    ellipse.addAttribute("rx", oval.width() / 2);
+    ellipse.addAttribute("ry", oval.height() / 2);
+    ellipse.addAttribute(attrName, attrVal);
 }
 
 void SkSVGDevice::drawRRect(const SkRRect& rr, const SkPaint& paint) {
@@ -850,9 +921,34 @@ void SkSVGDevice::drawRRect(const SkRRect& rr, const SkPaint& paint) {
     elem.addPathAttributes(path);
 }
 
+void SkSVGDevice::drawRRectWA(const SkRRect& rr,
+                           const SkPaint& paint, 
+                           const char* attrName, 
+                           const char* attrVal) {
+    SkPath path;
+    path.addRRect(rr);
+
+    AutoElement elem("path", fWriter, fResourceBucket.get(), MxCp(this), paint);
+    elem.addAttribute(attrName, attrVal);
+    elem.addPathAttributes(path);
+}
+
 void SkSVGDevice::drawPath(const SkPath& path, const SkPaint& paint,
                            const SkMatrix* prePathMatrix, bool pathIsMutable) {
     AutoElement elem("path", fWriter, fResourceBucket.get(), MxCp(this), paint);
+    elem.addPathAttributes(path);
+
+    // TODO: inverse fill types?
+    if (path.getFillType() == SkPath::kEvenOdd_FillType) {
+        elem.addAttribute("fill-rule", "evenodd");
+    }
+}
+
+void SkSVGDevice::drawPathWA(const SkPath& path, const SkPaint& paint,
+                           const char* attrName, const char* attrVal,
+                           const SkMatrix* prePathMatrix, bool pathIsMutable) {
+    AutoElement elem("path", fWriter, fResourceBucket.get(), MxCp(this), paint);
+    elem.addAttribute(attrName, attrVal);
     elem.addPathAttributes(path);
 
     // TODO: inverse fill types?
@@ -907,8 +1003,83 @@ void SkSVGDevice::drawBitmap(const SkBitmap& bitmap, SkScalar x, SkScalar y,
     drawBitmapCommon(mc, bitmap, paint);
 }
 
-void SkSVGDevice::drawSprite(const SkBitmap& bitmap,
+void SkSVGDevice::drawBitmapWA(const SkBitmap &bitmap, SkScalar x, SkScalar y, const SkPaint &paint, const char* attrName, const char* attrVal) {
+    MxCp mc(this);
+    SkMatrix adjustedMatrix = *mc.fMatrix;
+    adjustedMatrix.preTranslate(x, y);
+    mc.fMatrix = &adjustedMatrix;
+
+    sk_sp<SkData> pngData = encode(bitmap);
+    if (!pngData) {
+        return;
+    }
+
+    size_t b64Size = SkBase64::Encode(pngData->data(), pngData->size(), nullptr);
+    SkAutoTMalloc<char> b64Data(b64Size);
+    SkBase64::Encode(pngData->data(), pngData->size(), b64Data.get());
+
+    SkString svgImageData("data:image/png;base64,");
+    svgImageData.append(b64Data.get(), b64Size);
+
+    SkString imageID = fResourceBucket->addImage();
+    {
+        AutoElement defs("defs", fWriter);
+        {
+            AutoElement image("image", fWriter);
+            image.addAttribute("id", imageID);
+            image.addAttribute("width", bitmap.width());
+            image.addAttribute("height", bitmap.height());
+            image.addAttribute("xlink:href", svgImageData);
+            image.addAttribute(attrName, attrVal);
+        }
+    }
+
+    {
+        AutoElement imageUse("use", fWriter, fResourceBucket.get(), mc, paint);
+        imageUse.addAttribute("xlink:href", SkStringPrintf("#%s", imageID.c_str()));
+    }
+}
+
+void SkSVGDevice::drawSprite(const SkBitmap& bm,
                              int x, int y, const SkPaint& paint) {
+    MxCp mc(this);
+    SkMatrix adjustedMatrix = *mc.fMatrix;
+    adjustedMatrix.preTranslate(SkIntToScalar(x), SkIntToScalar(y));
+    mc.fMatrix = &adjustedMatrix;
+
+    sk_sp<SkData> pngData = encode(bm);
+    if (!pngData) {
+        return;
+    }
+
+    size_t b64Size = SkBase64::Encode(pngData->data(), pngData->size(), nullptr);
+    SkAutoTMalloc<char> b64Data(b64Size);
+    SkBase64::Encode(pngData->data(), pngData->size(), b64Data.get());
+
+    SkString svgImageData("data:image/png;base64,");
+    svgImageData.append(b64Data.get(), b64Size);
+
+    SkString imageID = fResourceBucket->addImage();
+    {
+        AutoElement defs("defs", fWriter);
+        {
+            AutoElement image("image", fWriter);
+            image.addAttribute("id", imageID);
+            image.addAttribute("width", bm.width());
+            image.addAttribute("height", bm.height());
+            image.addAttribute("xlink:href", svgImageData);
+        }
+    }
+
+    {
+        AutoElement imageUse("use", fWriter, fResourceBucket.get(), mc, paint);
+        imageUse.addAttribute("xlink:href", SkStringPrintf("#%s", imageID.c_str()));
+    }
+}
+
+void SkSVGDevice::drawSpriteWA(const SkBitmap& bitmap,
+                            int x, int y, const SkPaint& paint, 
+                            const char* attrName, const char* attrVal) {
     MxCp mc(this);
     SkMatrix adjustedMatrix = *mc.fMatrix;
     adjustedMatrix.preTranslate(SkIntToScalar(x), SkIntToScalar(y));
@@ -936,11 +1107,73 @@ void SkSVGDevice::drawBitmapRect(const SkBitmap& bm, const SkRect* srcOrNull,
     drawBitmapCommon(MxCp(&adjustedMatrix, cs), bm, paint);
 }
 
+void SkSVGDevice::drawBitmapRectWA(const SkBitmap &bm,
+                                const SkRect* srcOrNull, const SkRect& dst,
+                                const SkPaint& paint,
+                                const char* attrName, const char* attrVal,
+                                SkCanvas::SrcRectConstraint) {
+    SkClipStack* cs = &this->cs();
+    SkClipStack::AutoRestore ar(cs, false);
+    if (srcOrNull && *srcOrNull != SkRect::Make(bm.bounds())) {
+        cs->save();
+        cs->clipRect(dst, this->ctm(), kIntersect_SkClipOp, paint.isAntiAlias());
+    }
+
+    SkMatrix adjustedMatrix;
+    adjustedMatrix.setRectToRect(srcOrNull ? *srcOrNull : SkRect::Make(bm.bounds()),
+                                 dst,
+                                 SkMatrix::kFill_ScaleToFit);
+    adjustedMatrix.postConcat(this->ctm());
+
+    sk_sp<SkData> pngData = encode(bm);
+    if (!pngData) {
+        return;
+    }
+
+    auto mc = MxCp(&adjustedMatrix, cs);
+    size_t b64Size = SkBase64::Encode(pngData->data(), pngData->size(), nullptr);
+    SkAutoTMalloc<char> b64Data(b64Size);
+    SkBase64::Encode(pngData->data(), pngData->size(), b64Data.get());
+
+    SkString svgImageData("data:image/png;base64,");
+    svgImageData.append(b64Data.get(), b64Size);
+
+    SkString imageID = fResourceBucket->addImage();
+    {
+        AutoElement defs("defs", fWriter);
+        {
+            AutoElement image("image", fWriter);
+            image.addAttribute("id", imageID);
+            image.addAttribute("width", bm.width());
+            image.addAttribute("height", bm.height());
+            image.addAttribute(attrName, attrVal);
+            image.addAttribute("xlink:href", svgImageData);
+        }
+    }
+
+    {
+        AutoElement imageUse("use", fWriter, fResourceBucket.get(), mc, paint);
+        imageUse.addAttribute("xlink:href", SkStringPrintf("#%s", imageID.c_str()));
+    }
+}
+
 void SkSVGDevice::drawText(const void* text, size_t len,
                            SkScalar x, SkScalar y, const SkPaint& paint) {
     AutoElement elem("text", fWriter, fResourceBucket.get(), MxCp(this), paint);
     elem.addTextAttributes(paint);
 
+    SVGTextBuilder builder(text, len, paint, SkPoint::Make(x, y), 0);
+    elem.addAttribute("x", builder.posX());
+    elem.addAttribute("y", builder.posY());
+    elem.addText(builder.text());
+}
+
+void SkSVGDevice::drawTextWA(const void* text, size_t len,
+                           SkScalar x, SkScalar y, const SkPaint& paint, 
+                           const char* attrName, const char* attrVal) {
+    AutoElement elem("text", fWriter, fResourceBucket.get(), MxCp(this), paint);
+    elem.addTextAttributes(paint);
+    elem.addAttribute(attrName, attrVal);
     SVGTextBuilder builder(text, len, paint, SkPoint::Make(x, y), 0);
     elem.addAttribute("x", builder.posX());
     elem.addAttribute("y", builder.posY());
@@ -999,6 +1232,10 @@ void SkSVGDevice::drawTextOnPath(const void* text, size_t len, const SkPath& pat
 }
 
 void SkSVGDevice::drawVertices(const SkVertices*, SkBlendMode, const SkPaint&) {
+    // todo
+}
+
+void SkSVGDevice::drawVerticesWA(const SkVertices*, SkBlendMode, const SkPaint&, const char* attrName, const char* attrVal) {
     // todo
 }
 

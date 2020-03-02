@@ -358,6 +358,11 @@ void SkBitmapDevice::drawPaint(const SkPaint& paint) {
     BDDraw(this).drawPaint(paint);
 }
 
+void SkBitmapDevice::drawPaintWA(const SkPaint &paint, const char* attrName, const char* attrVal)
+{
+    BDDraw(this).drawPaintWA(paint, attrName, attrVal);
+}
+
 void SkBitmapDevice::drawPoints(SkCanvas::PointMode mode, size_t count,
                                 const SkPoint pts[], const SkPaint& paint) {
     LOOP_TILER( drawPoints(mode, count, pts, paint, nullptr), nullptr)

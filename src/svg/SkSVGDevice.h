@@ -52,8 +52,12 @@ protected:
                           bool pathIsMutable = false) override;
 
     void drawBitmap(const SkBitmap& bitmap, SkScalar x, SkScalar y, const SkPaint& paint) override;
+    void drawBitmapWA(const SkBitmap&, SkScalar x, SkScalar y, const SkPaint&, const char* attrName, const char* attrVal) override;
     void drawSprite(const SkBitmap& bitmap,
                     int x, int y, const SkPaint& paint) override;
+    void drawSpriteWA(const SkBitmap& bitmap,
+                            int x, int y, const SkPaint& paint, 
+                            const char* attrName, const char* attrVal) override;
     void drawBitmapRect(const SkBitmap&,
                         const SkRect* srcOrNull, const SkRect& dst,
                         const SkPaint& paint, SkCanvas::SrcRectConstraint) override;
@@ -64,6 +68,9 @@ protected:
                                 SkCanvas::SrcRectConstraint) override;
     void drawText(const void* text, size_t len,
                   SkScalar x, SkScalar y, const SkPaint& paint) override;
+    void drawTextWA(const void* text, size_t len,
+                          SkScalar x, SkScalar y, const SkPaint& paint, 
+                          const char* attrName, const char* attrVal) override;
     void drawPosText(const void* text, size_t len,
                      const SkScalar pos[], int scalarsPerPos,
                      const SkPoint& offset, const SkPaint& paint) override;
@@ -71,9 +78,20 @@ protected:
                         const SkPath& path, const SkMatrix* matrix,
                         const SkPaint& paint) override;
     void drawVertices(const SkVertices*, SkBlendMode, const SkPaint& paint) override;
-
+    void drawVerticesWA(const SkVertices*, SkBlendMode, const SkPaint&, const char* attrName, const char* attrVal) override;
     void drawDevice(SkBaseDevice*, int x, int y,
                     const SkPaint&) override;
+    void drawSpecialWA(SkSpecialImage *image, int x, int y, const SkPaint &paint,
+                             SkImage* clipImage, const SkMatrix& clipMatrix,
+                             const char* attrName, const char* attrVal) override {
+        drawSpecial(image, x, y, paint, clipImage, clipMatrix);
+    }
+    void drawRegionWA(const SkRegion& r,
+                            const SkPaint& paint,
+                            const char* attrName,
+                            const char* attrVal) override {
+        drawRegion(r, paint);
+    }
 
 private:
     SkSVGDevice(const SkISize& size, SkXMLWriter* writer);

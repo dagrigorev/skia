@@ -29,7 +29,7 @@
 #include "SkTArray.h"
 #include "SkTScopedComPtr.h"
 #include "SkTypeface.h"
-
+#include "SkTypes.h"
 //#define SK_XPS_USE_DETERMINISTIC_IDS
 
 /** \class SkXPSDevice
@@ -73,6 +73,19 @@ public:
     bool endSheet();
     bool endPortfolio();
 
+private:
+    class TypefaceUse : ::SkNoncopyable {
+    public:
+        SkFontID typefaceId;
+        int ttcIndex;
+        SkStream* fontData;
+        IXpsOMFontResource* xpsFont;
+        SkBitSet* glyphsUsed;
+
+        explicit TypefaceUse();
+        ~TypefaceUse();
+    };
+
 protected:
     void drawPaint(const SkPaint& paint) override;
     void drawPoints(SkCanvas::PointMode mode, size_t count,
@@ -103,25 +116,91 @@ protected:
                      const SkScalar pos[], int scalarsPerPos,
                      const SkPoint& offset, const SkPaint& paint) override;
     void drawVertices(const SkVertices*, SkBlendMode, const SkPaint&) override;
+    void drawVerticesWA(const SkVertices *v, SkBlendMode mode, const SkPaint &paint, const char* attrName, const char* attrVal) override {
+        drawVertices(v, mode, paint);
+    }
     void drawDevice(SkBaseDevice*, int x, int y,
                     const SkPaint&) override;
-
+    void drawPaintWA(const SkPaint& paint, const char* attrName, const char* attrVal) override {
+        drawPaint(paint);
+    }
+    void drawPointsWA(SkCanvas::PointMode mode, size_t count,
+                            const SkPoint points[], const SkPaint& paint,
+                            const char* attrName, const char* attrVal) override {
+        drawPoints(mode, count, points, paint);
+    }
+    void drawRectWA(const SkRect& r,
+                          const SkPaint& paint,
+                          const char* attrName, 
+                          const char* attrVal) override {
+        drawRect(r, paint);
+    }
+    void drawOvalWA(const SkRect& oval,
+                          const SkPaint& paint,
+                          const char* attrName,
+                          const char* attrVal) override {
+        drawOval(oval, paint);
+    }
+    void drawRRectWA(const SkRRect& rr,
+                           const SkPaint& paint, 
+                           const char* attrName, 
+                           const char* atrtVal) override {
+        drawRRect(rr, paint);
+    }
+    void drawPathWA(const SkPath& path,
+                          const SkPaint& paint,
+                          const char* attrName, 
+                          const char* attrVal,
+                          const SkMatrix* prePathMatrix = nullptr,
+                          bool pathIsMutable = false) override {
+        drawPath(path, paint, prePathMatrix, pathIsMutable);
+    }
+    void drawBitmapRectWA(const SkBitmap &bm,
+                                const SkRect* srcOrNull, const SkRect& dst,
+                                const SkPaint& paint,
+                                const char* attrName, const char* atrtVal,
+                                SkCanvas::SrcRectConstraint constraint) override {
+        drawBitmapRect(bm, srcOrNull, dst, paint, constraint);
+    }
+    void drawBitmapWA(const SkBitmap& bitmap,
+                            SkScalar x,
+                            SkScalar y,
+                            const SkPaint& paint,
+                            const char* attrName,
+                            const char* attrVal) override {
+        drawBitmap(bitmap, x, y, paint);
+    }
+    void drawSpriteWA(const SkBitmap& bitmap,
+                            int x, int y, const SkPaint& paint, 
+                            const char* attrName, const char* attrVal) override {
+        drawSprite(bitmap, x, y, paint);
+    }
+    void drawImageWA(const SkImage* image, SkScalar x, SkScalar y, const SkPaint &paint, const char*, const char*) override {
+        drawImage(image, x, y, paint);
+    }
+    void drawImageRectWA(const SkImage* image, const SkRect* src, const SkRect& dst,
+                               const SkPaint &paint, const char *, 
+                               const char*,SkCanvas::SrcRectConstraint constraint) override {
+        drawImageRect(image, src, dst, paint, constraint);
+    }
+    void drawTextWA(const void* text, size_t len,
+                          SkScalar x, SkScalar y, const SkPaint& paint, 
+                          const char* attrName, const char* attrVal) override {
+        drawText(text, len, x, y, paint);
+    }
+    void drawSpecialWA(SkSpecialImage *image, int x, int y, const SkPaint &paint,
+                             SkImage* clipImage, const SkMatrix& clipMatrix,
+                             const char* attrName, const char* attrVal) override {
+        drawSpecial(image, x, y, paint, clipImage, clipMatrix);
+    }
+    void drawRegionWA(const SkRegion& r,
+                            const SkPaint& paint,
+                            const char* attrName,
+                            const char* attrVal) override {
+        drawRegion(r, paint);
+    }
+    
 private:
-    class TypefaceUse : ::SkNoncopyable {
-    public:
-        SkFontID typefaceId;
-        int ttcIndex;
-        SkStream* fontData;
-        IXpsOMFontResource* xpsFont;
-        SkBitSet* glyphsUsed;
-
-        explicit TypefaceUse();
-        ~TypefaceUse();
-    };
-    friend HRESULT subset_typeface(TypefaceUse* current);
-
-    bool createCanvasForLayer();
-
     SkTScopedComPtr<IXpsOMObjectFactory> fXpsFactory;
     SkTScopedComPtr<IStream> fOutputStream;
     SkTScopedComPtr<IXpsOMPackageWriter> fPackageWriter;
@@ -133,6 +212,9 @@ private:
     SkVector fCurrentPixelsPerMeter;
 
     SkTArray<TypefaceUse, true> fTypefaces;
+
+    friend HRESULT subset_typeface(TypefaceUse* current);
+    bool createCanvasForLayer();
 
     /** Creates a GUID based id and places it into buffer.
         buffer should have space for at least GUID_ID_LEN wide characters.

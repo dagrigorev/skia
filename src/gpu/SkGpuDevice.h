@@ -198,6 +198,13 @@ public:
 
     void drawSpecial(SkSpecialImage*, int left, int top, const SkPaint& paint,
                      SkImage*, const SkMatrix&) override;
+    
+    void drawSpecialWA(SkSpecialImage *image, int x, int y, const SkPaint &paint,
+                             SkImage* clipImage, const SkMatrix& clipMatrix,
+                             const char* attrName, const char* attrVal) override {
+        drawSpecial(image, x, y, paint, clipImage, clipMatrix);
+    }
+    
     sk_sp<SkSpecialImage> makeSpecial(const SkBitmap&) override;
     sk_sp<SkSpecialImage> makeSpecial(const SkImage*) override;
     sk_sp<SkSpecialImage> snapSpecial() override;

@@ -235,6 +235,18 @@ protected:
 
     void drawSpecial(SkSpecialImage*, int x, int y, const SkPaint&,
                      SkImage*, const SkMatrix&) override;
+    void drawSpecialWA(SkSpecialImage *image, int x, int y, const SkPaint &paint,
+                             SkImage* clipImage, const SkMatrix& clipMatrix,
+                             const char* attrName, const char* attrVal) override {
+        drawSpecial(image, x, y, paint, clipImage, clipMatrix);
+    }
+    void drawRegionWA(const SkRegion& r,
+                            const SkPaint& paint,
+                            const char* attrName,
+                            const char* attrVal) override {
+        drawRegion(r, paint);
+    }
+    
     sk_sp<SkSpecialImage> makeSpecial(const SkBitmap&) override;
     sk_sp<SkSpecialImage> makeSpecial(const SkImage*) override;
     sk_sp<SkSpecialImage> snapSpecial() override;

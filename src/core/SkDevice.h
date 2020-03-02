@@ -174,7 +174,7 @@ protected:
     virtual void drawRegionWA(const SkRegion& r,
                             const SkPaint& paint,
                             const char* attrName,
-                            const char* attrVal);
+                            const char* attrVal) = 0;
     virtual void drawOval(const SkRect& oval,
                           const SkPaint& paint) = 0;
     virtual void drawOvalWA(const SkRect& oval,
@@ -314,7 +314,7 @@ protected:
                              SkImage* clipImage, const SkMatrix& clipMatrix);
     virtual void drawSpecialWA(SkSpecialImage*, int x, int y, const SkPaint&,
                              SkImage* clipImage, const SkMatrix& clipMatrix,
-                             const char* attrName, const char* attrVal);
+                             const char* attrName, const char* attrVal) {}
     virtual sk_sp<SkSpecialImage> makeSpecial(const SkBitmap&);
     virtual sk_sp<SkSpecialImage> makeSpecial(const SkImage*);
     virtual sk_sp<SkSpecialImage> snapSpecial();

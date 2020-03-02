@@ -98,7 +98,7 @@ void sk_canvas_draw_text_blob (sk_canvas_t* ccanvas, sk_textblob_t* text, float 
 }
 
 void sk_canvas_draw_text_blob_wa (sk_canvas_t* ccanvas, sk_textblob_t* text, float x, float y, const sk_paint_t* cpaint, const char* attrName, const char* attrVal) {
-    AsCanvas(ccanvas)->drawTextBlobWA(AsTextBlob(text), x, y, *AsPaint(cpaint), attrName, attrVal);
+    AsCanvas(ccanvas)->drawTextBlob(AsTextBlob(text), x, y, *AsPaint(cpaint));
 }
 
 void sk_canvas_draw_bitmap(sk_canvas_t* ccanvas, const sk_bitmap_t* cbitmap, float x, float y, const sk_paint_t* cpaint) {

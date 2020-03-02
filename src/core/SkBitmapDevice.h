@@ -98,7 +98,6 @@ protected:
     void drawPath(const SkPath&, const SkPaint&, const SkMatrix* prePathMatrix,
                           bool pathIsMutable) override;
     void drawBitmap(const SkBitmap&, SkScalar x, SkScalar y, const SkPaint&) override;
-    void drawBitmapWA(const SkBitmap&, SkScalar x, SkScalar y, const SkPaint&, const char* attrName, const char* attrVal) override;
     void drawSprite(const SkBitmap&, int x, int y, const SkPaint&) override;
     void drawSpriteWA(const SkBitmap &bitmap, int x, int y, const SkPaint &paint, const char*, const char*) override {
         drawSprite(bitmap, x, y, paint);
@@ -117,7 +116,9 @@ protected:
     void drawText(const void* text, size_t len, SkScalar x, SkScalar y,
                   const SkPaint&) override;
     void drawTextWA(const void* text, size_t len, SkScalar x, SkScalar y,
-                  const SkPaint&, const char* attrName, const char* attrVal) override;
+                  const SkPaint &paint, const char* attrName, const char* attrVal) override {
+        drawText(text, len, x, y, paint);
+    }
     void drawPosText(const void* text, size_t len, const SkScalar pos[],
                      int scalarsPerPos, const SkPoint& offset, const SkPaint& paint) override;
     void drawVertices(const SkVertices*, SkBlendMode, const SkPaint&) override;
@@ -128,8 +129,10 @@ protected:
 
     void drawPaintWA(const SkPaint& paint, const char* attrName, const char* attrVal) override;
     void drawPointsWA(SkCanvas::PointMode mode, size_t count,
-                            const SkPoint[], const SkPaint& paint,
-                            const char* attrName, const char* attrVal) override;
+                            const SkPoint pts[], const SkPaint& paint,
+                            const char* attrName, const char* attrVal) override {
+        drawPoints(mode, count, pts, paint);
+    }
     void drawRectWA(const SkRect& r,
                           const SkPaint& paint,
                           const char* attrName, 
@@ -139,26 +142,42 @@ protected:
     void drawRegionWA(const SkRegion& r,
                             const SkPaint& paint,
                             const char* attrName,
-                            const char* attrVal) override;
+                            const char* attrVal) override {
+        drawRegion(r, paint);
+    }
     void drawOvalWA(const SkRect& oval,
                           const SkPaint& paint,
                           const char* attrName,
-                          const char* attrVal) override;
+                          const char* attrVal) override {
+        drawOval(oval, paint);
+    }
     void drawRRectWA(const SkRRect& rr,
                            const SkPaint& paint, 
                            const char* attrName, 
-                           const char* atrtVal) override;
+                           const char* atrtVal) override {
+        drawRRect(rr, paint);
+    }
     void drawPathWA(const SkPath& path,
                           const SkPaint& paint,
                           const char* attrName, 
                           const char* attrVal,
                           const SkMatrix* prePathMatrix = nullptr,
-                          bool pathIsMutable = false) override;
-    void drawBitmapRectWA(const SkBitmap&,
+                          bool pathIsMutable = false) override {
+        drawPath(path, paint, prePathMatrix, pathIsMutable);
+    }
+    void drawBitmapRectWA(const SkBitmap &bitmap,
                                 const SkRect* srcOrNull, const SkRect& dst,
                                 const SkPaint& paint,
                                 const char* attrName, const char* atrtVal,
-                                SkCanvas::SrcRectConstraint) override;
+                                SkCanvas::SrcRectConstraint constraint) override {
+                                    drawBitmapRect(bitmap, srcOrNull, dst, paint, constraint);
+                                }
+    void drawBitmapWA(const SkBitmap& bitmap,
+                            SkScalar x,
+                            SkScalar y,
+                            const SkPaint& paint,
+                            const char* attrName,
+                            const char* attrVal) override {}
     ///////////////////////////////////////////////////////////////////////////
 
     void drawSpecial(SkSpecialImage*, int x, int y, const SkPaint&,

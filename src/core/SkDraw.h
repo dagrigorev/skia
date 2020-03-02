@@ -36,6 +36,7 @@ public:
     SkDraw();
 
     void    drawPaint(const SkPaint&) const;
+    void    drawPaintWA(const SkPaint &paint, const char* attrName, const char* attrVal);
     void    drawPoints(SkCanvas::PointMode, size_t count, const SkPoint[],
                        const SkPaint&, SkBaseDevice*) const;
     void    drawRect(const SkRect& prePaintRect, const SkPaint&, const SkMatrix* paintMatrix,

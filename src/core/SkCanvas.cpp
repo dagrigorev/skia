@@ -2986,6 +2986,23 @@ void SkCanvas::drawText(const void* text, size_t byteLength, SkScalar x, SkScala
         this->onDrawText(text, byteLength, x, y, paint);
     }
 }
+
+void SkCanvas::drawTextWA(const void* text, size_t byteLength, SkScalar x, SkScalar y,
+                        const SkPaint& paint, const char* attrName, const char* attrVal) {
+    TRACE_EVENT0("skia", TRACE_FUNC);
+    if (byteLength) {
+        sk_msan_assert_initialized(text, SkTAddOffset<const void>(text, byteLength));
+        //this->onDrawText(text, byteLength, x, y, paint);
+        LOOPER_BEGIN(paint, SkDrawFilter::kText_Type, nullptr)
+
+        while (iter.next()) {
+            iter.fDevice->drawTextWA(text, byteLength, x, y, looper.paint(), attrName, attrVal);
+        }
+
+        LOOPER_END
+    }
+}
+
 void SkCanvas::drawPosText(const void* text, size_t byteLength, const SkPoint pos[],
                            const SkPaint& paint) {
     TRACE_EVENT0("skia", TRACE_FUNC);
@@ -2994,6 +3011,28 @@ void SkCanvas::drawPosText(const void* text, size_t byteLength, const SkPoint po
         this->onDrawPosText(text, byteLength, pos, paint);
     }
 }
+
+void SkCanvas::drawPosTextWA(const void* text, size_t byteLength, const SkPoint pos[],
+                           const SkPaint& paint, const char* attrName, const char* attrVal) {
+    // TODO: implement
+}
+
+void SkCanvas::drawTextOnPathHVWA(const void* text, size_t byteLength,
+                                const SkPath& path, SkScalar hOffset,
+                                SkScalar vOffset, const SkPaint& paint, const char*, const char*)
+{}
+
+void SkCanvas::drawVerticesWA(const SkVertices* vertices, SkBlendMode mode, const SkPaint& paint, const char* attrName, const char* attrVal){
+    LOOPER_BEGIN(paint, SkDrawFilter::kPath_Type, nullptr)
+
+    while (iter.next()) {
+        // In the common case of one iteration we could std::move vertices here.
+        iter.fDevice->drawVerticesWA(vertices, mode, looper.paint(), attrName, attrVal);
+    }
+
+    LOOPER_END
+}
+
 void SkCanvas::drawPosTextH(const void* text, size_t byteLength, const SkScalar xpos[],
                             SkScalar constY, const SkPaint& paint) {
     TRACE_EVENT0("skia", TRACE_FUNC);
@@ -3047,6 +3086,18 @@ void SkCanvas::drawPatch(const SkPoint cubics[12], const SkColor colors[4],
     }
 
     this->onDrawPatch(cubics, colors, texCoords, bmode, paint);
+}
+
+void SkCanvas::drawPatchWA(const SkPoint cubics[12], const SkColor colors[4],
+                   const SkPoint texCoords[4], SkBlendMode mode, const SkPaint& paint, 
+                   const char* attrName, const char* attrVal)
+{
+    TRACE_EVENT0("skia", TRACE_FUNC);
+    if (nullptr == cubics) {
+        return;
+    }
+
+    this->onDrawPatch(cubics, colors, texCoords, mode, paint);
 }
 
 void SkCanvas::onDrawPatch(const SkPoint cubics[12], const SkColor colors[4],
@@ -3300,6 +3351,22 @@ void SkCanvas::drawTextOnPathHV(const void* text, size_t byteLength,
 #define kMaxPictureOpsToUnrollInsteadOfRef  1
 
 void SkCanvas::drawPicture(const SkPicture* picture, const SkMatrix* matrix, const SkPaint* paint) {
+    TRACE_EVENT0("skia", TRACE_FUNC);
+    RETURN_ON_NULL(picture);
+
+    if (matrix && matrix->isIdentity()) {
+        matrix = nullptr;
+    }
+    if (picture->approximateOpCount() <= kMaxPictureOpsToUnrollInsteadOfRef) {
+        SkAutoCanvasMatrixPaint acmp(this, matrix, paint, picture->cullRect());
+        picture->playback(this);
+    } else {
+        this->onDrawPicture(picture, matrix, paint);
+    }
+}
+
+void SkCanvas::drawPictureWA(const SkPicture* picture, const SkMatrix* matrix, const SkPaint* paint, const char* attrName, const char* attrVal)
+{
     TRACE_EVENT0("skia", TRACE_FUNC);
     RETURN_ON_NULL(picture);
 
