@@ -53,6 +53,7 @@ config("default") {
       cflags += [ "-fms-compatibility-version=19" ]  # 2015
     }
     defines += [
+      "_SCL_SECURE_NO_WARNINGS",
       "_CRT_SECURE_NO_WARNINGS",  # Disables warnings about sscanf().
       "_HAS_EXCEPTIONS=0",  # Disables exceptions in MSVC STL.
       "WIN32_LEAN_AND_MEAN",
@@ -339,7 +340,7 @@ config("warnings") {
   cflags_objcc = []
   if (is_win) {
     cflags += [
-      "/WX",  # Treat warnings as errors.
+      #"/WX",  # Treat warnings as errors.
       "/W3",  # Turn on lots of warnings.
 
       # Disable a bunch of warnings:

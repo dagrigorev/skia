@@ -2458,6 +2458,73 @@ public:
 
     void private_draw_shadow_rec(const SkPath&, const SkDrawShadowRec&);
 
+    // Attributed methods declared here
+    void drawTextWA(const void* text, size_t byteLength, SkScalar x, SkScalar y,
+                        const SkPaint& paint, const char* attrName, const char* attrVal);
+    void drawColorWA(SkColor c, const char *attrName, const char *attrVal, SkBlendMode mode);
+    void drawPointWA(SkScalar x, SkScalar y, const SkPaint& paint, const char* attrName, const char* attrVal);
+    void drawPointsWA(PointMode mode, size_t count, const SkPoint pts[], const SkPaint& paint, const char* attrName, const char* attrVal);
+    void drawLineWA(SkScalar x0, SkScalar y0, SkScalar x1, SkScalar y1, const SkPaint& paint, const char* attrName, const char* attrVal);
+    void drawCircleWA(SkScalar cx, SkScalar cy, SkScalar radius, const SkPaint& paint, const char* attrName, const char* attrVal);
+    void drawRoundRectWA(const SkRect& r, SkScalar rx, SkScalar ry,
+                             const SkPaint& paint, const char* attrName, const char* attrVal);
+    void drawArcWA(const SkRect& oval, SkScalar startAngle,
+                       SkScalar sweepAngle, bool useCenter,
+                       const SkPaint& paint, const char* attrName, const char* attrVal);
+    void drawPictureWA(const SkPicture* picture, const SkMatrix* matrix, const SkPaint* paint, const char* attrName, const char* attrVal);
+    void drawPosTextWA(const void* text, size_t byteLength, const SkPoint pos[],
+                           const SkPaint& paint, const char* attrName, const char* attrVal);
+    void drawTextOnPathHVWA(const void* text, size_t byteLength,
+                                const SkPath& path, SkScalar hOffset,
+                                SkScalar vOffset, const SkPaint& paint, const char*, const char*);
+    void drawBitmapWA(const SkBitmap& bitmap, SkScalar dx, SkScalar dy, const char* attrName, const char* attrVal, const SkPaint* paint);
+    void drawBitmapRectWA(
+                        const SkBitmap& bitmap, 
+                        const SkRect& src, 
+                        const SkRect& dst,
+                        const SkPaint* paint, 
+                        const char* attrName, 
+                        const char* attrVal, 
+                        SrcRectConstraint constraint);
+    void drawBitmapRectWA(
+                        const SkBitmap& bitmap, 
+                        const SkRect& dst, 
+                        const SkPaint* paint,
+                        const char* attrName, 
+                        const char* attrVal, 
+                        SrcRectConstraint constraint);
+    void drawPaintWA(const SkPaint& paint, const char* attrName, const char* attrVal);
+    void drawRegionWA(const SkRegion& region, const SkPaint& paint, const char* attrName, const char* attrVal);
+    void drawRectWA(const SkRect& r, const SkPaint& paint, const char* attrName, const char* attrVal);
+    void drawRRectWA(const SkRRect& rrect, const SkPaint& paint, const char* attrName, const char* attrVal);
+    void drawOvalWA(const SkRect& r, const SkPaint& paint, const char* attrName, const char* attrVal);
+    void drawPathWA(const SkPath& path, const SkPaint& paint, const char* attrName, const char* attrVal);
+    void drawImageWA(const SkImage* image, SkScalar x, SkScalar y, const char* attrName, const char* attrVal, const SkPaint* paint);
+    void drawImageRectWA(const SkImage* image, const SkRect& src, const SkRect& dst,
+                             const SkPaint* paint, const char* attrName, const  char* attrVal, 
+                             SrcRectConstraint constraint);
+    void drawImageRectWA(const SkImage* image, const SkIRect& isrc, const SkRect& dst,
+                             const SkPaint* paint, const char* attrName, const  char* attrVal, 
+                             SrcRectConstraint constraint);
+    void drawImageRectWA(const SkImage* image, 
+                            const SkRect& dst, 
+                            const SkPaint* paint,
+                            const char* attrName, 
+                            const char* attrVal,
+                            SrcRectConstraint constraint);
+    void drawDrawableWA(SkDrawable* dr, const char* attrName, const char* attrVal, const SkMatrix* matrix);
+    void drawDrawableWA(SkDrawable* dr, SkScalar x, SkScalar y, const char* attrName, const char* attrVal);
+    void drawVerticesWA(const SkVertices* vertices, SkBlendMode mode, const SkPaint& paint, const char* attrName, const char* attrVal);
+    void drawDRRectWA(const SkRRect& outer, const SkRRect& inner,
+                          const SkPaint& paint, const char* attrName, 
+                          const char* attrVal);
+    void drawAtlasWA(const SkImage* atlas, const SkRSXform xform[], const SkRect tex[],
+                         const SkColor colors[], int count, SkBlendMode mode,
+                         const SkRect* cull, const SkPaint* paint,
+                         const char* attrName, const char* attrVal);
+    void drawPatchWA(const SkPoint cubics[12], const SkColor colors[4],
+                   const SkPoint texCoords[4], SkBlendMode mode, const SkPaint& paint, 
+                   const char* attrName, const char* attrVal);
 
 protected:
     // default impl defers to getDevice()->newSurface(info)

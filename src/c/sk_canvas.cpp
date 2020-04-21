@@ -120,10 +120,23 @@ void sk_canvas_draw_bitmap_rect(sk_canvas_t* ccanvas, const sk_bitmap_t* cbitmap
 
 void sk_canvas_draw_bitmap_rect_wa(sk_canvas_t* ccanvas, const sk_bitmap_t* cbitmap, const sk_rect_t* csrcR, const sk_rect_t* cdstR, const sk_paint_t* cpaint, const char* attrName, const char* attrVal) {
     if (csrcR) {
-        AsCanvas(ccanvas)->drawBitmapRectWA(*AsBitmap(cbitmap), *AsRect(csrcR), *AsRect(cdstR), AsPaint(cpaint), attrName, attrVal);
+        AsCanvas(ccanvas)->drawBitmapRectWA(
+            *AsBitmap(cbitmap), 
+            *AsRect(csrcR),
+            *AsRect(cdstR), 
+            AsPaint(cpaint), 
+            attrName, 
+            attrVal,
+            SkCanvas::SrcRectConstraint::kStrict_SrcRectConstraint);
     }
     else {
-        AsCanvas(ccanvas)->drawBitmapRectWA(*AsBitmap(cbitmap), *AsRect(cdstR), AsPaint(cpaint), attrName, attrVal);
+        AsCanvas(ccanvas)->drawBitmapRectWA(
+            *AsBitmap(cbitmap), 
+            *AsRect(cdstR), 
+            AsPaint(cpaint), 
+            attrName, 
+            attrVal,
+            SkCanvas::SrcRectConstraint::kStrict_SrcRectConstraint);
     }
 }
 
@@ -285,9 +298,9 @@ void sk_canvas_draw_image_rect(sk_canvas_t* ccanvas, const sk_image_t* cimage, c
 
 void sk_canvas_draw_image_rect_wa(sk_canvas_t* ccanvas, const sk_image_t* cimage, const sk_rect_t* csrcR, const sk_rect_t* cdstR, const sk_paint_t* cpaint, const char* attrName, const char* attrVal) {
     if (csrcR) {
-        AsCanvas(ccanvas)->drawImageRectWA(AsImage(cimage), *AsRect(csrcR), *AsRect(cdstR), AsPaint(cpaint), attrName, attrVal);
+        AsCanvas(ccanvas)->drawImageRectWA(AsImage(cimage), *AsRect(csrcR), *AsRect(cdstR), AsPaint(cpaint), attrName, attrVal, SkCanvas::SrcRectConstraint::kStrict_SrcRectConstraint);
     } else {
-        AsCanvas(ccanvas)->drawImageRectWA(AsImage(cimage), *AsRect(cdstR), AsPaint(cpaint), attrName, attrVal);
+        AsCanvas(ccanvas)->drawImageRectWA(AsImage(cimage), *AsRect(cdstR), AsPaint(cpaint), attrName, attrVal, SkCanvas::SrcRectConstraint::kStrict_SrcRectConstraint);
     }
 }
 

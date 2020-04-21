@@ -30,7 +30,7 @@ declare_args() {
   win_sdk = "C:/Program Files (x86)/Windows Kits/10"
   win_sdk_version = ""
 
-  win_vc = ""
+  win_vc = "D:/BuildTools/VC"
   win_toolchain_version = ""
 
   clang_win = ""
