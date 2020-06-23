@@ -10,6 +10,7 @@
 
 #include "SkClipStackDevice.h"
 #include "SkTemplates.h"
+#include "SkCustomElement.h"
 
 class SkXMLWriter;
 
@@ -20,6 +21,8 @@ public:
 protected:
     void drawPaint(const SkPaint& paint) override;
     void drawPaintWA(const SkPaint& paint, const char* attrName, const char* attrVal) override;
+    
+    void drawCustomElement(const SkCustomElement &element, const SkPaint &paint) override;
     
     void drawAnnotation(const SkRect& rect, const char key[], SkData* value) override;
     void drawPoints(SkCanvas::PointMode mode, size_t count,

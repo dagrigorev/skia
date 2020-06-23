@@ -72,6 +72,10 @@ public:
 protected:
     void* getRasterHandle() const override { return fRasterHandle; }
 
+    void drawCustomElement(const SkCustomElement &element, const SkPaint &paint) override {
+        // Don't need in BMP.
+    }
+    
     /** These are called inside the per-device-layer loop for each draw call.
      When these are called, we have already applied any saveLayer operations,
      and are handling any looping from the paint, and any effects from the

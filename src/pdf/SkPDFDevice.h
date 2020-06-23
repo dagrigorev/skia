@@ -65,6 +65,10 @@ public:
 
     ~SkPDFDevice() override;
 
+    void drawCustomElement(const SkCustomElement &element, const SkPaint &paint) override {
+        // Don't need in PDF. Maybe fro watermarks only.
+    }
+
     /**
      *  These are called inside the per-device-layer loop for each draw call.
      *  When these are called, we have already applied any saveLayer

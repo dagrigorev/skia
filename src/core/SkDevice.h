@@ -13,6 +13,7 @@
 #include "SkColor.h"
 #include "SkRegion.h"
 #include "SkSurfaceProps.h"
+#include "SkCustomElement.h"
 
 class SkBitmap;
 class SkDrawFilter;
@@ -158,6 +159,9 @@ protected:
      */
     virtual void drawPaint(const SkPaint& paint) = 0;
     virtual void drawPaintWA(const SkPaint& paint, const char* attrName, const char* attrVal) = 0;
+
+    virtual void drawCustomElement(const SkCustomElement &element, const SkPaint &paint) = 0;
+
     virtual void drawPoints(SkCanvas::PointMode mode, size_t count,
                             const SkPoint[], const SkPaint& paint) = 0;
     virtual void drawPointsWA(SkCanvas::PointMode mode, size_t count,
@@ -491,6 +495,9 @@ protected:
     void drawDevice(SkBaseDevice*, int, int, const SkPaint&) override {}
     void drawVertices(const SkVertices*, SkBlendMode, const SkPaint&) override {}
     protected:
+    void drawCustomElement(const SkCustomElement &element, const SkPaint &paint) override {
+        // Don't need in BMP.
+    }
     void drawPaintWA(const SkPaint& paint, const char* attrName, const char* attrVal) override {}
     void drawPointsWA(SkCanvas::PointMode mode, size_t count,
                             const SkPoint[], const SkPaint& paint,

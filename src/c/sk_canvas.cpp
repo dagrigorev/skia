@@ -280,6 +280,11 @@ void sk_canvas_draw_path_wa(sk_canvas_t* ccanvas, const sk_path_t* cpath, const 
     AsCanvas(ccanvas)->drawPathWA(*AsPath(cpath), *AsPaint(cpaint), attrName, attrVal);
 }
 
+void sk_canvas_draw_custom(sk_canvas_t* ccanvas, sk_custom_element_t* element, sk_paint_t* cpaint)
+{
+    AsCanvas(ccanvas)->drawCustomElement(AsSkCustomElement(*element), *AsPaint(cpaint));
+}
+
 void sk_canvas_draw_image(sk_canvas_t* ccanvas, const sk_image_t* cimage, float x, float y, const sk_paint_t* cpaint) {
     AsCanvas(ccanvas)->drawImage(AsImage(cimage), x, y, AsPaint(cpaint));
 }

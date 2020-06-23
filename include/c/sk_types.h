@@ -62,6 +62,16 @@ typedef struct sk_color4f_t {
     float fA;
 } sk_color4f_t;
 
+typedef struct sk_attr_t {
+    char name[20];
+    char value[255];
+} sk_attr_t;
+
+typedef struct sk_custom_element_t {
+    char name[20];
+    sk_attr_t *attrs;
+} sk_custom_element_t;
+
 typedef enum {
     UNKNOWN_SK_COLORTYPE = 0,
     ALPHA_8_SK_COLORTYPE,

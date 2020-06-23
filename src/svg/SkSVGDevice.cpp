@@ -766,6 +766,10 @@ void SkSVGDevice::drawPaintWA(const SkPaint& paint, const char* attrName, const 
                                           SkIntToScalar(this->height())));
 }
 
+void SkSVGDevice::drawCustomElement(const SkCustomElement &element, const SkPaint &paint) {
+    AutoElement customElement(element.name, fWriter, fResourceBucket.get(), MxCp(this), paint);
+}
+
 void SkSVGDevice::drawAnnotation(const SkRect& rect, const char key[], SkData* value) {
     if (!value) {
         return;

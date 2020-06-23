@@ -68,6 +68,10 @@ public:
 
     GrRenderTargetContext* accessRenderTargetContext() override;
 
+    void drawCustomElement(const SkCustomElement &element, const SkPaint &paint) override {
+        // Don't need in BMP.
+    }
+    
     void drawPaint(const SkPaint& paint) override;
     void drawPaintWA(const SkPaint& paint, const char* attrName, const char* attrVal) override {
         drawPaint(paint);

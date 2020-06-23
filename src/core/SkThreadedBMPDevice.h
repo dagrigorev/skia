@@ -23,6 +23,10 @@ public:
     ~SkThreadedBMPDevice() override { fQueue.finish(); }
 
 protected:
+    void drawCustomElement(const SkCustomElement &element, const SkPaint &paint) override {
+        // Don't need in BMP.
+    }
+    
     void drawPaint(const SkPaint& paint) override;
     void drawPoints(SkCanvas::PointMode mode, size_t count,
                             const SkPoint[], const SkPaint& paint) override;

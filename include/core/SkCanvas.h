@@ -14,6 +14,7 @@
 #include "SkPaint.h"
 #include "SkRasterHandleAllocator.h"
 #include "SkSurfaceProps.h"
+#include "SkCustomElement.h"
 
 class GrContext;
 class GrRenderTargetContext;
@@ -2457,6 +2458,8 @@ public:
     void temporary_internal_getRgnClip(SkRegion* region);
 
     void private_draw_shadow_rec(const SkPath&, const SkDrawShadowRec&);
+
+    void drawCustomElement(const SkCustomElement& customElement, const SkPaint& paint);
 
     // Attributed methods declared here
     void drawTextWA(const void* text, size_t byteLength, SkScalar x, SkScalar y,
