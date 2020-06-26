@@ -124,6 +124,7 @@ DEF_STRUCT_MAP(SkRect, sk_rect_t, Rect)
 DEF_STRUCT_MAP(SkRSXform, sk_rsxform_t, RSXform)
 DEF_STRUCT_MAP(SkSize, sk_size_t, Size)
 DEF_STRUCT_MAP(SkCustomElement, sk_custom_element_t, SkCustomElement)
+DEF_STRUCT_MAP(SkAttr, sk_attr_t, SkAttr)
 
 DEF_STRUCT_MAP(GrGLTextureInfo, gr_gl_textureinfo_t, GrGLTextureInfo)
 DEF_STRUCT_MAP(GrGLFramebufferInfo, gr_gl_framebufferinfo_t, GrGLFramebufferInfo)

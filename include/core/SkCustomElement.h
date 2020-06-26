@@ -1,22 +1,25 @@
 #ifndef SkCustomElement_DEFINED
 #define SkCustomElement_DEFINED
 
-#include <SkTypes.h>
+#include "SkTypes.h"
 
 /*
  * Simple skia attribute
  */
 struct SK_API SkAttr {
-    char name[20];
-    char value[255];
+    char *name;
+    char *value;
 };
 
 /*
- *  The custom elemnt definition
+ *  The custom element definition
  */
 struct SK_API SkCustomElement {
-    char name[20];
-    SkAttr *attrs;
+    char *body;
+    int attrsLength;
+    SkAttr* attrs;
+    SkCustomElement* root;
+    SkCustomElement* nextChild;
 };
 
 #endif

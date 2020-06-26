@@ -767,7 +767,16 @@ void SkSVGDevice::drawPaintWA(const SkPaint& paint, const char* attrName, const 
 }
 
 void SkSVGDevice::drawCustomElement(const SkCustomElement &element, const SkPaint &paint) {
-    AutoElement customElement(element.name, fWriter, fResourceBucket.get(), MxCp(this), paint);
+    AutoElement customElement(element.body, fWriter);
+    SkCustomElement* root = element.nextChild;
+    if(root != NULL)
+    {
+        auto childPtr = new AutoElement(root->body, fWriter);
+        root = root->nextChild;
+        delete childPtr;
+
+        drawCustomElement(*root, paint);
+    }
 }
 
 void SkSVGDevice::drawAnnotation(const SkRect& rect, const char key[], SkData* value) {
