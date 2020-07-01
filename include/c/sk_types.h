@@ -62,19 +62,6 @@ typedef struct sk_color4f_t {
     float fA;
 } sk_color4f_t;
 
-typedef struct sk_attr_t {
-    char *name;
-    char *value;
-} sk_attr_t;
-
-typedef struct sk_custom_element_t {
-    char *body;
-    int attrsLength;
-    struct sk_attr_t* attrs;
-    struct sk_custom_element_t* root;
-    struct sk_custom_element_t* nextChild;
-} sk_custom_element_t;
-
 typedef enum {
     UNKNOWN_SK_COLORTYPE = 0,
     ALPHA_8_SK_COLORTYPE,
@@ -750,6 +737,18 @@ typedef struct {
     bool                fPDFA;
     int                 fEncodingQuality;
 } sk_document_pdf_metadata_t;
+
+typedef struct sk_attr_t {
+    const char attrName[50];
+    const char* attrData;
+} sk_attr_t;
+
+typedef struct sk_custom_element_t {
+    const char *body;
+    int attrsLength;
+    struct sk_attr_t *attrs;
+    struct sk_custom_element_t* nextChild;
+} sk_custom_element_t;
 
 typedef struct {
     sk_colorspace_t* colorspace;

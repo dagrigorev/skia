@@ -7,19 +7,18 @@
  * Simple skia attribute
  */
 struct SK_API SkAttr {
-    char *name;
-    char *value;
+    const char attrName[10];
+    const char *attrData;
 };
 
 /*
  *  The custom element definition
  */
 struct SK_API SkCustomElement {
-    char *body;
+    const char *body;
     int attrsLength;
-    SkAttr* attrs;
-    SkCustomElement* root;
-    SkCustomElement* nextChild;
+    struct SkAttr* attrs;
+    struct SkCustomElement* nextChild;
 };
 
 #endif

@@ -767,16 +767,29 @@ void SkSVGDevice::drawPaintWA(const SkPaint& paint, const char* attrName, const 
 }
 
 void SkSVGDevice::drawCustomElement(const SkCustomElement &element, const SkPaint &paint) {
-    AutoElement customElement(element.body, fWriter);
-    SkCustomElement* root = element.nextChild;
-    if(root != NULL)
-    {
-        auto childPtr = new AutoElement(root->body, fWriter);
-        root = root->nextChild;
-        delete childPtr;
+    SkCustomElement* workRoot = element.nextChild;
 
-        drawCustomElement(*root, paint);
+    if(strlen(element.body) == 0) return;
+
+    AutoElement *rootElement = new AutoElement(element.body, fWriter);
+    for(int attrIndex=0; attrIndex < element.attrsLength; attrIndex++)
+        if(element.attrs[attrIndex].attrData)
+            rootElement->addAttribute(element.attrs[attrIndex].attrName, SkString(element.attrs[attrIndex].attrData));
+
+    int watchCounter = 0;
+    while(workRoot != NULL && watchCounter < 10000)
+    {
+        AutoElement autoElement(workRoot->body, fWriter);
+         for(int attrIndex=0; attrIndex < element.attrsLength; attrIndex++){
+            if(element.attrs[attrIndex].attrData)
+                autoElement.addAttribute(element.attrs[attrIndex].attrName, SkString(element.attrs[attrIndex].attrData));
+         }
+        
+         workRoot = workRoot->nextChild;
+         watchCounter++;
     }
+    
+    delete rootElement;
 }
 
 void SkSVGDevice::drawAnnotation(const SkRect& rect, const char key[], SkData* value) {
