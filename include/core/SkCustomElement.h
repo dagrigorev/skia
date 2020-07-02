@@ -7,8 +7,8 @@
  * Simple skia attribute
  */
 struct SK_API SkAttr {
-    const char attrName[10];
-    const char *attrData;
+    const char attrName[50];
+    const char attrData[255];
 };
 
 /*

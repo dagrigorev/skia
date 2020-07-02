@@ -740,7 +740,7 @@ typedef struct {
 
 typedef struct sk_attr_t {
     const char attrName[50];
-    const char* attrData;
+    const char attrData[255];
 } sk_attr_t;
 
 typedef struct sk_custom_element_t {
