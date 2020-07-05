@@ -2,13 +2,14 @@
 #define SkCustomElement_DEFINED
 
 #include "SkTypes.h"
+#include <string>
 
 /*
  * Simple skia attribute
  */
 struct SK_API SkAttr {
-    const char attrName[50];
-    const char attrData[255];
+    std::string attrName;
+    std::string attrData;
 };
 
 /*

@@ -773,16 +773,16 @@ void SkSVGDevice::drawCustomElement(const SkCustomElement &element, const SkPain
 
     AutoElement *rootElement = new AutoElement(element.body, fWriter);
     for(int attrIndex=0; attrIndex < element.attrsLength; attrIndex++)
-        if(element.attrs[attrIndex].attrData)
-            rootElement->addAttribute(element.attrs[attrIndex].attrName, SkString(element.attrs[attrIndex].attrData));
+        if(element.attrs[attrIndex].attrData.c_str())
+            rootElement->addAttribute(element.attrs[attrIndex].attrName.c_str(), SkString(element.attrs[attrIndex].attrData.c_str()));
 
     int watchCounter = 0;
     while(workRoot != NULL && watchCounter < 10000)
     {
         AutoElement autoElement(workRoot->body, fWriter);
          for(int attrIndex=0; attrIndex < element.attrsLength; attrIndex++){
-            if(element.attrs[attrIndex].attrData)
-                autoElement.addAttribute(element.attrs[attrIndex].attrName, SkString(element.attrs[attrIndex].attrData));
+            if(element.attrs[attrIndex].attrData.c_str())
+                autoElement.addAttribute(element.attrs[attrIndex].attrName.c_str(), SkString(element.attrs[attrIndex].attrData.c_str()));
          }
         
          workRoot = workRoot->nextChild;
