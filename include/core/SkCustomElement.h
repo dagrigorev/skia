@@ -8,8 +8,7 @@
  * Simple skia attribute
  */
 struct SK_API SkAttr {
-    std::string attrName;
-    std::string attrData;
+    const char* jsonData;
 };
 
 /*
@@ -18,7 +17,7 @@ struct SK_API SkAttr {
 struct SK_API SkCustomElement {
     const char *body;
     int attrsLength;
-    struct SkAttr* attrs;
+    struct SkAttr *attrs;
     struct SkCustomElement* nextChild;
 };
 

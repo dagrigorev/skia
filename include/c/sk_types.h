@@ -739,13 +739,11 @@ typedef struct {
 } sk_document_pdf_metadata_t;
 
 typedef struct sk_attr_t {
-    const char *attrName;
-    const char *attrData;
+    const char *jsonData;
 } sk_attr_t;
 
 typedef struct sk_custom_element_t {
     const char *body;
-    int attrsLength;
     struct sk_attr_t *attrs;
     struct sk_custom_element_t* nextChild;
 } sk_custom_element_t;

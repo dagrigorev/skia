@@ -6,6 +6,7 @@
 
 void drawEmptyCustomElement(SkCanvas *svgCanvas, const SkPaint& paint);
 void drawEmptyCustomWithAttrs(SkCanvas* svgCanvas, const SkPaint& paint);
+void drawCustomWithAttrs(SkCanvas* svgCanvas, const SkPaint& paint);
 
 int main(void) {
     SkFILEWStream svgStream("test.svg");
@@ -24,6 +25,7 @@ int main(void) {
 
     drawEmptyCustomElement(svgCanvas.get(), paint);
     drawEmptyCustomWithAttrs(svgCanvas.get(), paint);
+    drawCustomWithAttrs(svgCanvas.get(), paint);
 
     return 0;
 }
@@ -38,8 +40,7 @@ void drawEmptyCustomElement(SkCanvas *svgCanvas, const SkPaint& paint) {
 
 SkAttr* getRandomAttr() {
     auto attr = new SkAttr();
-    attr->attrName = "TestName";
-    attr->attrData = "TestValue";
+    attr->jsonData = "{attr1: value1, attr2: value2, attrs3: 12312}";
 
     return attr;
 }
@@ -49,12 +50,31 @@ void drawEmptyCustomWithAttrs(SkCanvas* svgCanvas, const SkPaint& paint) {
     custom.body = "Sample";
     custom.nextChild = NULL;
     custom.attrsLength = 3;
-    custom.attrs = new SkAttr[3]
-    {
-        *getRandomAttr(),
-        *getRandomAttr(),
-        *getRandomAttr()
-    };
+    custom.attrs = new SkAttr[3];
 
+    for (int i=0; i < custom.attrsLength; i++) {
+        custom.attrs[i] = SkAttr{"{attr1: value1, attr2: value2, attrs3: 12312}"};
+    }
     svgCanvas->drawCustomElement(custom, paint);
+}
+
+SkCustomElement* getCustom() {
+    auto custom = new SkCustomElement();
+    custom->body = "Sample";
+    custom->nextChild = NULL;
+    custom->attrsLength = 3;
+    custom->attrs = new SkAttr[3];
+    //{*getRandomAttr(), *getRandomAttr(), *getRandomAttr()};
+    for (int i = 0; i < custom->attrsLength; i++) {
+        custom->attrs[i] = SkAttr{"{attr1: value1, attr2: value2, attrs3: 12312}"};
+    }
+    return custom;
+}
+
+void drawCustomWithAttrs(SkCanvas* svgCanvas, const SkPaint& paint) {
+    auto root = getCustom();
+    root->nextChild = getCustom();
+    root->nextChild->nextChild = getCustom();
+
+    svgCanvas->drawCustomElement(*root, paint);
 }
